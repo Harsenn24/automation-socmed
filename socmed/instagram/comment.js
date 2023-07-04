@@ -33,13 +33,17 @@ async function comment_ig(req, res) {
 
     await page.goto(`https://www.instagram.com/p/${post_link}`);
 
-    // await page.reload()
+    setTimeout(async () => {
+      await page.reload();
 
-    await page.waitForSelector('textarea[aria-label="Tambahkan komentar…"]');
+      await page.waitForSelector('textarea[aria-label="Tambahkan komentar…"]');
 
-    await page.type('textarea[aria-label="Tambahkan komentar…"]', user_comment);
-
-    await page.keyboard.press("Enter");
+      await page.type(
+        'textarea[aria-label="Tambahkan komentar…"]',
+        user_comment
+      );
+      await page.keyboard.press("Enter");
+    }, 8000);
 
     res.status(200).json(global_response("SUCCESS", 200, "Comment Success"));
   } catch (error) {

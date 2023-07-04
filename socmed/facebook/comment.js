@@ -33,15 +33,17 @@ async function comment_fb(req, res) {
 
     await page.goto(post_link);
 
-    // await page.reload()
+    setTimeout(async () => {
+      await page.waitForSelector('div[aria-label="Tulis komentar"]');
 
-    await page.waitForSelector('div[aria-label="Tulis komentar"]');
+      await page.type('div[aria-label="Tulis komentar"]', user_comment);
 
-    await page.type('div[aria-label="Tulis komentar"]', user_comment);
+      await page.keyboard.press("Enter");
+    }, 8000);
 
-    await page.keyboard.press("Enter");
-
-    res.status(200).json(global_response("SUCCESS", 200, "Facebook Comment Success"));
+    res
+      .status(200)
+      .json(global_response("SUCCESS", 200, "Facebook Comment Success"));
   } catch (error) {
     res.status(400).json(global_response("ERROR", 400, error));
   }
