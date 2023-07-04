@@ -43,7 +43,6 @@ async function like_ig(req, res) {
     if (containsBatalSuka) {
       final_result = "You already like this instagram post";
     } else {
-      await page.reload()
       await page.evaluate(() => {
         const likeButton = document.querySelector(
           'div.x1i10hfl.x6umtig.x1b1mbwd.xaqea5y.xav7gou.x9f619.xe8uvvx.xdj266r.x11i5rnm.xat24cr.x1mh8g0r.x16tdsg8.x1hl2dhg.xggy1nq.x1a2a7pz.x6s0dn4.xjbqb8w.x1ejq31n.xd10rxx.x1sy0etr.x17r0tee.x1ypdohk.x78zum5.xl56j7k.x1y1aw1k.x1sxyh0.xwib8y2.xurb0ha span svg[aria-label="Suka"]'

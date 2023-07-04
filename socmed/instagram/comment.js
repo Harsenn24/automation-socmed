@@ -33,7 +33,7 @@ async function comment_ig(req, res) {
 
     await page.goto(`https://www.instagram.com/p/${post_link}`);
 
-    await page.reload()
+    // await page.reload()
 
     await page.waitForSelector('textarea[aria-label="Tambahkan komentar…"]');
 
