@@ -1,22 +1,15 @@
 const axios = require("axios");
 const global_response = require("../../global_response");
 const puppeteer = require("puppeteer");
+const { validate_body_comment } = require("../../helper/validation");
 const url_adspower = process.env.URL_ADSPOWER;
 
 async function comment_fb(req, res) {
   try {
-    const { user_id, post_link, user_comment } = req.body;
+    const check_validate = await validate_body_comment(req);
 
-    if (!user_id) {
-      throw { message: "User Id is required" };
-    }
-
-    if (!post_link) {
-      throw { message: "Post link is required" };
-    }
-
-    if (!user_comment) {
-      throw { message: "User comment is required" };
+    if (check_validate) {
+      throw { message: check_validate.message };
     }
 
     const { data } = await axios.get(`${url_adspower}${user_id}`);

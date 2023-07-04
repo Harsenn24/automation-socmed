@@ -1,4 +1,4 @@
-async function validate_body(req) {
+async function validate_body_like(req) {
   try {
     const { user_id, post_link } = req.body;
 
@@ -14,4 +14,24 @@ async function validate_body(req) {
   }
 }
 
-module.exports = validate_body
+async function validate_body_comment(req) {
+  try {
+    const { user_id, post_link, user_comment } = req.body;
+
+    if (!user_id) {
+      throw { message: "User Id is required" };
+    }
+
+    if (!post_link) {
+      throw { message: "Post link is required" };
+    }
+
+    if (!user_comment) {
+      throw { message: "User comment is required" };
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+module.exports = { validate_body_like, validate_body_comment };

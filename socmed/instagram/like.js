@@ -2,17 +2,14 @@ const global_response = require("../../global_response");
 const puppeteer = require("puppeteer");
 const url_adspower = process.env.URL_ADSPOWER;
 const axios = require("axios");
+const { validate_body_like } = require("../../helper/validation");
 
 async function like_ig(req, res) {
   try {
-    const { user_id, post_link } = req.body;
+    const check_validate = await validate_body_like(req);
 
-    if (!user_id) {
-      throw { message: "User Id is required" };
-    }
-
-    if (!post_link) {
-      throw { message: "Post link is required" };
+    if (check_validate) {
+      throw { message: check_validate.message };
     }
 
     const { data } = await axios.get(`${url_adspower}${user_id}`);
@@ -54,11 +51,9 @@ async function like_ig(req, res) {
       }
       res.status(200).json(global_response("SUCCESS", 200, final_result));
     }, 8000);
-
   } catch (error) {
     console.log(error);
     res.status(400).json(global_response("FAILED", 400, error));
-
   }
 }
 

@@ -1,10 +1,10 @@
 const global_response = require("../../global_response");
 const helper_like_ig = require("../../helper/like");
-const validate_body = require("../../helper/validation");
+const {validate_body_like} = require("../../helper/validation");
 
 async function like_fb(req, res) {
   try {
-    const check_validate = await validate_body(req);
+    const check_validate = await validate_body_like(req);
 
     if (check_validate) {
       throw { message: check_validate.message };
