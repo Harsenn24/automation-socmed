@@ -12,6 +12,8 @@ async function comment_ig(req, res) {
       throw { message: check_validate.message };
     }
 
+    const { user_id, post_link, user_comment } = req.body;
+
     const { data } = await axios.get(`${url_adspower}${user_id}`);
 
     const puppeteerUrl = data.data.ws.puppeteer;
@@ -20,6 +22,7 @@ async function comment_ig(req, res) {
       browserWSEndpoint: puppeteerUrl,
       defaultViewport: null,
     });
+
     const pages = await browser.pages(0);
 
     const page = pages[0];
@@ -27,18 +30,43 @@ async function comment_ig(req, res) {
     await page.goto(`https://www.instagram.com/p/${post_link}`);
 
     setTimeout(async () => {
-      await page.waitForSelector('textarea[aria-label="Tambahkan komentar…"]');
+      await page.reload()
+
+      await page.waitForSelector('textarea[aria-label="Tambahkan komentar…"]', {
+        visible: true,
+      });
 
       await page.type(
         'textarea[aria-label="Tambahkan komentar…"]',
         user_comment
       );
       await page.keyboard.press("Enter");
-    }, 8000);
-
-    res.status(200).json(global_response("SUCCESS", 200, "Comment Success"));
+      res.status(200).json(global_response("SUCCESS", 200, "Comment Success"));
+    }, 5000);
   } catch (error) {
+    console.log(error);
     res.status(400).json(global_response("ERROR", 400, error));
+  }
+}
+
+async function type_comment(user_comment, page, isCommentFieldEmpty) {
+  console.log(isCommentFieldEmpty);
+  if (isCommentFieldEmpty === 0) {
+    await page.type('textarea[aria-label="Tambahkan komentar…"]', user_comment);
+
+    let new_type_value = await page.evaluate(() => {
+      const commentInput = document.querySelector(
+        'textarea[aria-label="Tambahkan komentar…"]'
+      );
+      return commentInput.value;
+    });
+
+    console.log(new_type_value.length, "value terbaru");
+
+    await type_comment(user_comment, page, new_type_value.length);
+  } else {
+    console.log("ok berhasil ngetik");
+    return true;
   }
 }
 

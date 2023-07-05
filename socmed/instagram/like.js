@@ -12,6 +12,8 @@ async function like_ig(req, res) {
       throw { message: check_validate.message };
     }
 
+    const { user_id, post_link } = req.body;
+
     const { data } = await axios.get(`${url_adspower}${user_id}`);
 
     const puppeteerUrl = data.data.ws.puppeteer;

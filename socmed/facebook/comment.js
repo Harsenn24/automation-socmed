@@ -12,6 +12,8 @@ async function comment_fb(req, res) {
       throw { message: check_validate.message };
     }
 
+    const { user_id, post_link, user_comment } = req.body;
+
     const { data } = await axios.get(`${url_adspower}${user_id}`);
 
     const puppeteerUrl = data.data.ws.puppeteer;
@@ -27,16 +29,20 @@ async function comment_fb(req, res) {
     await page.goto(post_link);
 
     setTimeout(async () => {
-      await page.waitForSelector('div[aria-label="Tulis komentar"]');
+      await page.reload();
+
+      await page.waitForSelector('div[aria-label="Tulis komentar"]', {
+        visible: true,
+      });
 
       await page.type('div[aria-label="Tulis komentar"]', user_comment);
 
       await page.keyboard.press("Enter");
-    }, 8000);
 
-    res
-      .status(200)
-      .json(global_response("SUCCESS", 200, "Facebook Comment Success"));
+      res
+        .status(200)
+        .json(global_response("SUCCESS", 200, "Facebook Comment Success"));
+    }, 5000);
   } catch (error) {
     res.status(400).json(global_response("ERROR", 400, error));
   }
