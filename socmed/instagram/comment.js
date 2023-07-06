@@ -14,13 +14,16 @@ async function comment_ig(req, res) {
 
     const { user_id, post_link, user_comment } = req.body;
 
-    const { data } = await axios.get(`${url_adspower}${user_id}`);
+    const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
+
+    // const { data } = await axios.get(`${url_adspower}${user_id}`);
 
     const puppeteerUrl = data.data.ws.puppeteer;
 
     const browser = await puppeteer.connect({
       browserWSEndpoint: puppeteerUrl,
-      defaultViewport: null,
+      // defaultViewport: null,
+      headless: true,
     });
 
     const pages = await browser.pages(0);
@@ -30,7 +33,7 @@ async function comment_ig(req, res) {
     await page.goto(`https://www.instagram.com/p/${post_link}`);
 
     setTimeout(async () => {
-      await page.reload()
+      await page.reload();
 
       await page.waitForSelector('textarea[aria-label="Tambahkan komentar…"]', {
         visible: true,
