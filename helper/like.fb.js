@@ -5,13 +5,16 @@ const axios = require("axios");
 async function helper_like_fb(user_id, post_link) {
   const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
 
-  // const { data } = await axios.get(`${url_adspower}${user_id}`);
+  if (data.msg === "Failed to start browser") {
+    throw {
+      message: `User ${user_id} is having a problem, try a different user id please`,
+    };
+  }
 
   const puppeteerUrl = data.data.ws.puppeteer;
 
   const browser = await puppeteer.connect({
     browserWSEndpoint: puppeteerUrl,
-    // defaultViewport: null,
     headless: true,
   });
 
