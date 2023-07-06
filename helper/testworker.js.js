@@ -24,10 +24,10 @@ async function test_worker(users_queue, post_link, helper_fn, action) {
           } catch (error) {
             const result_failed = { user: user_id, message: error.message };
             result.failed.push(result_failed);
+            await processNextUser();
             return error;
           }
         } else {
-          console.log(by_user, post_link);
           try {
             const result_like = await helper_fn(by_user, post_link);
             const result_success = { user: by_user, message: result_like };
@@ -35,6 +35,7 @@ async function test_worker(users_queue, post_link, helper_fn, action) {
           } catch (error) {
             const result_failed = { user: by_user, message: error.message };
             result.failed.push(result_failed);
+            await processNextUser();
             return error;
           }
         }
