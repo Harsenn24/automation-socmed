@@ -7,13 +7,11 @@ async function helper_like_fb(user_id, post_link) {
 
   // const { data } = await axios.get(`${url_adspower}${user_id}`);
 
-
   const puppeteerUrl = data.data.ws.puppeteer;
 
   const browser = await puppeteer.connect({
     browserWSEndpoint: puppeteerUrl,
     // defaultViewport: null,
-
     headless: true,
   });
 
