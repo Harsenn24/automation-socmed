@@ -1,4 +1,5 @@
 const helper_comment_fb = require("./comment.fb");
+const helper_comment_ig = require("./comment.ig");
 const helper_like_fb = require("./like.fb");
 const helper_like_ig = require("./like.ig");
 
@@ -9,7 +10,6 @@ async function processJobs(users_queue, post_link, socmed, service) {
       failed: [],
     };
 
-    console.log(users_queue, post_link, socmed, service);
 
     const processNextUser = async () => {
       if (users_queue.length > 0) {
@@ -40,11 +40,27 @@ async function processJobs(users_queue, post_link, socmed, service) {
             }
           }
         } else {
-          try {
-            await helper_like_ig(user_id, post_link);
-            result.success.push(user_id);
-          } catch (error) {
-            result.failed.push(user_id);
+          if (service === "like") {
+            try {
+              await helper_like_ig(user_id, post_link);
+              result.success.push(user_id);
+            } catch (error) {
+              result.failed.push(user_id);
+            }
+          } else {
+            try {
+              const user_ig = user_id.user;
+
+              const comment_ig = user_id.comment;
+
+              await helper_comment_ig(user_ig, post_link, comment_ig);
+
+              result.success.push(user_ig);
+            } catch (error) {
+              const user_ig = user_id.user;
+
+              result.failed.push(user_ig);
+            }
           }
         }
 
