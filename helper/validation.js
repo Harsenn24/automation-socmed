@@ -34,4 +34,20 @@ async function validate_body_comment(req) {
   }
 }
 
-module.exports = { validate_body_like, validate_body_comment };
+async function validate_body_comment_multiple(req) {
+  try {
+    const { user_data, post_link } = req.body;
+
+    if (!user_data) {
+      throw { message: "User data is required" };
+    }
+
+    if (!post_link) {
+      throw { message: "Post link is required" };
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+module.exports = { validate_body_like, validate_body_comment, validate_body_comment_multiple };
