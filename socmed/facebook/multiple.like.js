@@ -12,7 +12,7 @@ async function like_fb_multiple(req, res) {
 
     const { user_id, post_link } = req.body;
 
-    const result = await processJobs(user_id, post_link, "fb");
+    const result = await processJobs(user_id, post_link, "fb", "like");
 
     res.status(200).json(global_response("Success", 200, result));
   } catch (error) {

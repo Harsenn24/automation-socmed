@@ -1,5 +1,5 @@
-const  axios = require("axios");
-const  puppeteer  = require("puppeteer");
+const axios = require("axios");
+const puppeteer = require("puppeteer");
 const url_adspower = process.env.URL_ADSPOWER;
 
 async function helper_comment_fb(user_comment, user_id, post_link) {
@@ -22,26 +22,22 @@ async function helper_comment_fb(user_comment, user_id, post_link) {
 
     return new Promise((resolve) => {
       setTimeout(async () => {
-  
         await page.reload();
-        
+
         await page.waitForSelector('div[aria-label="Tulis komentar"]', {
           visible: true,
         });
-        
+
         await page.type('div[aria-label="Tulis komentar"]', user_comment);
-        
+
         await page.keyboard.press("Enter");
-        
-        resolve("Facebook Comment Success")
-        
+
+        resolve("Facebook Comment Success");
       }, 5000);
-
-    })
-
+    });
   } catch (error) {
     return error;
   }
 }
 
-module.exports = helper_comment_fb
+module.exports = helper_comment_fb;
