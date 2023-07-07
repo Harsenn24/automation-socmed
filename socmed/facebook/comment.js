@@ -12,10 +12,13 @@ async function comment_fb(req, res) {
 
     const { user_id, post_link, user_comment } = req.body;
 
+    const { headless } = req.query;
+
     const final_result = await helper_comment_fb(
       user_id,
       post_link,
-      user_comment
+      user_comment,
+      headless
     );
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
