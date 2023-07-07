@@ -1,9 +1,13 @@
 const axios = require("axios");
 const puppeteer = require("puppeteer");
+const { headless_axios, headless_puppeteer } = require("./headless");
 const url_adspower = process.env.URL_ADSPOWER;
 
-async function helper_comment_ig(user_id, post_link, user_comment) {
-  const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
+async function helper_comment_ig(user_id, post_link, user_comment, headless) {
+  // const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
+
+  const data = await headless_axios(headless, user_id)
+
 
   if (data.msg === "Failed to start browser") {
     throw {
@@ -12,10 +16,12 @@ async function helper_comment_ig(user_id, post_link, user_comment) {
   }
   const puppeteerUrl = data.data.ws.puppeteer;
 
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: puppeteerUrl,
-    headless: true,
-  });
+  // const browser = await puppeteer.connect({
+  //   browserWSEndpoint: puppeteerUrl,
+  //   headless: true,
+  // });
+
+  const browser = await headless_puppeteer(headless, puppeteerUrl)
 
   const pages = await browser.pages(0);
 

@@ -12,10 +12,13 @@ async function comment_ig(req, res) {
 
     const { user_id, post_link, user_comment } = req.body;
 
+    const { headless } = req.query;
+
     let final_result = await helper_comment_ig(
       user_id,
       post_link,
-      user_comment
+      user_comment,
+      headless
     );
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));

@@ -1,4 +1,4 @@
-async function test_worker(users_queue, post_link, helper_fn, action) {
+async function test_worker(users_queue, post_link, helper_fn, action, headless) {
   try {
     const result = {
       success: [],
@@ -16,7 +16,8 @@ async function test_worker(users_queue, post_link, helper_fn, action) {
             const process_like = await helper_fn(
               user_id,
               post_link,
-              user_comment
+              user_comment,
+              headless
             );
 
             const result_success = { user: user_id, message: process_like };
