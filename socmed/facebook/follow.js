@@ -12,7 +12,13 @@ async function follow_fb(req, res) {
 
     const { user_id, profile_link } = req.body;
 
-    const final_result = await helper_follow_fb(user_id, profile_link);
+    const { headless } = req.query;
+
+    const final_result = await helper_follow_fb(
+      user_id,
+      profile_link,
+      headless
+    );
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
