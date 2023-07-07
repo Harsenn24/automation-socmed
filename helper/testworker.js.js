@@ -1,4 +1,10 @@
-async function test_worker(users_queue, post_link, helper_fn, action, headless) {
+async function test_worker(
+  users_queue,
+  post_link,
+  helper_fn,
+  action,
+  headless
+) {
   try {
     const result = {
       success: [],
@@ -30,7 +36,7 @@ async function test_worker(users_queue, post_link, helper_fn, action, headless) 
           }
         } else {
           try {
-            const result_like = await helper_fn(by_user, post_link);
+            const result_like = await helper_fn(by_user, post_link, headless);
             const result_success = { user: by_user, message: result_like };
             result.success.push(result_success);
           } catch (error) {
