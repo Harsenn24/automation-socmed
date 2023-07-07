@@ -60,12 +60,18 @@ async function helper_like_fb(user_id, post_link, headless) {
 
         console.log(`${user_id} ${final_result}`);
 
+        
+        // await browser.close()
         resolve(final_result);
+
       } catch (error) {
         reject(`error account ${user_id} : ${error}`);
       }
+      await browser.close()
     }, 8000);
   });
+
+  
 }
 
 module.exports = helper_like_fb;
