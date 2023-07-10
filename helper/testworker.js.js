@@ -1,3 +1,5 @@
+const update_user_account = require("../controller/update.user");
+
 async function test_worker(
   users_queue,
   post_link,
@@ -53,6 +55,13 @@ async function test_worker(
     };
 
     await processNextUser();
+
+    if (result.failed.length > 0) {
+      for (const item of result.failed) {
+        const { user, message } = item;
+        await update_user_account(user, message);
+      }
+    }
 
     return result;
   } catch (error) {
