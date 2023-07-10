@@ -12,7 +12,9 @@ async function follow_ig(req, res) {
 
     const { user_id, profile_link } = req.body;
 
-    const final_result = await helper_follow_ig(user_id, profile_link);
+    const { headless } = req.query;
+
+    const final_result = await helper_follow_ig(user_id, profile_link, headless);
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
@@ -21,4 +23,4 @@ async function follow_ig(req, res) {
   }
 }
 
-module.exports = follow_ig
+module.exports = follow_ig;

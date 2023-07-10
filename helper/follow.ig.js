@@ -1,9 +1,9 @@
-const axios = require("axios");
-const puppeteer = require("puppeteer");
-const url_adspower = process.env.URL_ADSPOWER;
+const { headless_axios, headless_puppeteer } = require("./headless");
 
-async function helper_follow_ig(user_id, profile_link) {
-    const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
+async function helper_follow_ig(user_id, profile_link, headless) {
+  // const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
+
+  const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
     throw {
@@ -13,10 +13,12 @@ async function helper_follow_ig(user_id, profile_link) {
 
   const puppeteerUrl = data.data.ws.puppeteer;
 
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: puppeteerUrl,
-    headless: true,
-  });
+  // const browser = await puppeteer.connect({
+  //   browserWSEndpoint: puppeteerUrl,
+  //   headless: true,
+  // });
+
+  const browser = await headless_puppeteer(headless, puppeteerUrl);
 
   const pages = await browser.pages(0);
 
@@ -24,27 +26,34 @@ async function helper_follow_ig(user_id, profile_link) {
 
   await page.goto(profile_link);
 
-  let final_result = await new Promise((resolve) => {
+  let final_result = await new Promise((resolve, reject) => {
     setTimeout(async () => {
-      await page.reload();
+      try {
+        await page.reload();
 
-      await page.waitForSelector("._aacl._aaco._aacw._aad6._aade");
+        await page.waitForSelector("._aacl._aaco._aacw._aad6._aade");
 
-      const result_follow = await page.$$eval(
-        "._aacl._aaco._aacw._aad6._aade",
-        (elements) => {
-          for (const element of elements) {
-            if (element.textContent === "Ikuti") {
-              element.click();
-              return "Success follow instagram account";
-            } else if (element.textContent === "Diikuti") {
-              return "You already follow this instagram account";
+        const result_follow = await page.$$eval(
+          "._aacl._aaco._aacw._aad6._aade",
+          (elements) => {
+            for (const element of elements) {
+              if (element.textContent === "Ikuti") {
+                element.click();
+                return "Success follow instagram account";
+              } else if (element.textContent === "Diikuti") {
+                return "You already follow this instagram account";
+              }
             }
           }
-        }
-      );
+        );
 
-      resolve(result_follow);
+        resolve(result_follow);
+      } catch (error) {
+        console.log(`account ${user_id} : ${error}}`);
+        reject(error);
+      } finally {
+        await browser.close();
+      }
     }, 5000);
   });
 
