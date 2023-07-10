@@ -13,11 +13,14 @@ async function follow_ig_multiple(req, res) {
 
     const { user_id, profile_link } = req.body;
 
+    const { headless } = req.query;
+
     const final_result = await test_worker(
       user_id,
       profile_link,
       helper_follow_ig,
-      "follow"
+      "follow",
+      headless
     );
 
     res.status(200).json(global_response("Success", 200, final_result));

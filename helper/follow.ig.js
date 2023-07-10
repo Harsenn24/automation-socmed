@@ -1,8 +1,6 @@
 const { headless_axios, headless_puppeteer } = require("./headless");
 
 async function helper_follow_ig(user_id, profile_link, headless) {
-  // const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
-
   const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
@@ -12,11 +10,6 @@ async function helper_follow_ig(user_id, profile_link, headless) {
   }
 
   const puppeteerUrl = data.data.ws.puppeteer;
-
-  // const browser = await puppeteer.connect({
-  //   browserWSEndpoint: puppeteerUrl,
-  //   headless: true,
-  // });
 
   const browser = await headless_puppeteer(headless, puppeteerUrl);
 
