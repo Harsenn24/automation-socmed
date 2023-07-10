@@ -16,9 +16,8 @@ async function helper_comment_ig(user_id, post_link, user_comment, headless) {
 
   const page = pages[0];
 
-  await page.goto(`https://www.instagram.com/p/${post_link}`);
-
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    await page.goto(`https://www.instagram.com/p/${post_link}`);
     setTimeout(async () => {
       try {
         await page.reload();
@@ -38,10 +37,11 @@ async function helper_comment_ig(user_id, post_link, user_comment, headless) {
 
         resolve("Instagram Comment Success");
       } catch (error) {
+        console.log(`account ${user_id} : ${error}}`);
         reject(error);
+      } finally {
+        await browser.close();
       }
-
-      await browser.close();
     }, 5000);
   });
 }
