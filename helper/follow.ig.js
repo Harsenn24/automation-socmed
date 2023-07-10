@@ -1,9 +1,12 @@
+const update_user_account = require("../controller/update.user");
 const { headless_axios, headless_puppeteer } = require("./headless");
 
 async function helper_follow_ig(user_id, profile_link, headless) {
   const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
+    await update_user_account(user_id, data.msg);
+
     throw {
       message: `User ${user_id} is having a problem, try a different user id please`,
     };
@@ -49,8 +52,6 @@ async function helper_follow_ig(user_id, profile_link, headless) {
       }
     }, 5000);
   });
-
-  // await browser.close()
 
   return final_result;
 }
