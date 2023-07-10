@@ -25,7 +25,7 @@ async function like_fb_multiple(req, res) {
 
     res.status(200).json(global_response("Success", 200, result));
   } catch (error) {
-    res.status(400).json(global_response("FAILED", 400, error));
+    res.status(400).json(global_response("FAILED", 400, error.toString()));
   }
 }
 

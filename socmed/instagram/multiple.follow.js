@@ -25,8 +25,7 @@ async function follow_ig_multiple(req, res) {
 
     res.status(200).json(global_response("Success", 200, final_result));
   } catch (error) {
-    console.log(error);
-    res.status(400).json(global_response("FAILED", 400, error));
+    res.status(400).json(global_response("FAILED", 400, error.toString()));
   }
 }
 

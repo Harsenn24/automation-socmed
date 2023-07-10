@@ -1,6 +1,7 @@
 const global_response = require("../../global_response");
 const { validate_body_follow } = require("../../helper/validation");
 const helper_follow_fb = require("../../helper/follow.fb");
+const update_user_account = require("../../controller/update.user");
 
 async function follow_fb(req, res) {
   try {
@@ -22,8 +23,9 @@ async function follow_fb(req, res) {
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
-    console.log(error);
-    res.status(400).json(global_response("Failed", 400, error));
+    const { user_id } = req.body;
+    await update_user_account(user_id, error.toString());
+    res.status(400).json(global_response("FAILED", 400, error.toString()));
   }
 }
 
