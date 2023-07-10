@@ -59,7 +59,7 @@ async function test_worker(
     if (result.failed.length > 0) {
       for (const item of result.failed) {
         const { user, message } = item;
-        await update_user_account(user, message);
+        await update_user_account(user, message, false);
       }
     }
 

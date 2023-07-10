@@ -1,21 +1,14 @@
-const global_response = require("../../global_response");
-const { validate_body_follow } = require("../../helper/validation");
-const helper_follow_fb = require("../../helper/follow.fb");
 const update_user_account = require("../../controller/update.user");
+const global_response = require("../../global_response");
+const helper_follow_twitter = require("../../helper/follow.twitter");
 
-async function follow_fb(req, res) {
+async function follow_twitter(req, res) {
   try {
-    const check_validate = await validate_body_follow(req);
-
-    if (check_validate) {
-      throw { message: check_validate.message };
-    }
-
     const { user_id, profile_link } = req.body;
 
     const { headless } = req.query;
 
-    const final_result = await helper_follow_fb(
+    const final_result = await helper_follow_twitter(
       user_id,
       profile_link,
       headless
@@ -31,4 +24,4 @@ async function follow_fb(req, res) {
   }
 }
 
-module.exports = follow_fb;
+module.exports = follow_twitter;

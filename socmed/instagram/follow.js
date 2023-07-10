@@ -25,7 +25,7 @@ async function follow_ig(req, res) {
   } catch (error) {
     const { user_id } = req.body;
 
-    await update_user_account(user_id, error.message);
+    await update_user_account(user_id, error.message, false);
 
     res.status(400).json(global_response("Failed", 400, error.message));
   }
