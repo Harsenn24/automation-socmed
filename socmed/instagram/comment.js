@@ -25,8 +25,10 @@ async function comment_ig(req, res) {
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
     const { user_id } = req.body;
-    await update_user_account(user_id, error.toString());
-    res.status(400).json(global_response("ERROR", 400, error.toString()));
+
+    await update_user_account(user_id, error.message);
+
+    res.status(400).json(global_response("Failed", 400, error.message));
   }
 }
 
