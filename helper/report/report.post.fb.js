@@ -1,3 +1,4 @@
+const update_user_account = require("../../controller/update.user");
 const { headless_axios, headless_puppeteer } = require("../headless");
 const sub_report = require("./sub.report");
 
@@ -81,11 +82,14 @@ async function helper_report_post_fb(
 
         await page.click(selector_send);
 
+        await update_user_account(user_id, null, true);
+
         resolve(
           `success report post with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
         );
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
+        await update_user_account(user_id, error.message, false);
         reject(error);
       } finally {
         // await browser.close();
