@@ -1,5 +1,5 @@
-const { headless_axios, headless_puppeteer } = require("./headless");
-const report_action = require("./report.fb.post.options");
+const { headless_axios, headless_puppeteer } = require("../headless");
+const sub_report = require("./sub.report");
 
 async function helper_report_post_fb(
   user_id,
@@ -68,7 +68,9 @@ async function helper_report_post_fb(
           );
 
           if (textContent === report_issue) {
-            await report_action(option, report_issue, page, sub_report_1);
+            await option.click();
+
+            await sub_report(page, sub_report_1);
             break;
           }
         }
@@ -84,7 +86,7 @@ async function helper_report_post_fb(
         console.log(`account ${user_id} : ${error}}`);
         reject(error);
       } finally {
-        // await browser.close();
+        await browser.close();
       }
     }, 5000);
   });
