@@ -86,7 +86,8 @@ async function helper_report_post_fb(
         console.log(`account ${user_id} : ${error}}`);
         reject(error);
       } finally {
-        await browser.close();
+        // await browser.close();
+        console.log("ok")
       }
     }, 5000);
   });
