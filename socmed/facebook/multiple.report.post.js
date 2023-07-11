@@ -1,6 +1,6 @@
 const update_user_account = require("../../controller/update.user");
 const global_response = require("../../global_response");
-const helper_report_post_fb = require("../../helper/report.post.fb/report.post.fb");
+const helper_report_post_fb = require("../../helper/report/report.post.fb");
 const test_worker = require("../../helper/testworker.js");
 
 async function report_post_fb_multiple(req, res) {
