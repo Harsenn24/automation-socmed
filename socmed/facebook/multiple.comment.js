@@ -24,8 +24,7 @@ async function multiple_comment_fb(req, res) {
 
     res.status(200).json(global_response("Success", 200, result));
   } catch (error) {
-    console.log(error);
-    res.status(400).json(global_response("Failed", 400, error));
+    res.status(400).json(global_response("FAILED", 400, error.toString()));
   }
 }
 

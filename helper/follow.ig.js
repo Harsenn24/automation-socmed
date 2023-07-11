@@ -50,8 +50,6 @@ async function helper_follow_ig(user_id, profile_link, headless) {
     }, 5000);
   });
 
-  // await browser.close()
-
   return final_result;
 }
 

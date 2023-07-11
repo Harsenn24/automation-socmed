@@ -1,6 +1,7 @@
 const global_response = require("../../global_response");
 const { validate_body_like } = require("../../helper/validation");
 const helper_like_ig = require("../../helper/like.ig");
+const update_user_account = require("../../controller/update.user");
 
 async function like_ig(req, res) {
   try {
@@ -18,8 +19,11 @@ async function like_ig(req, res) {
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
-    console.log(error);
-    res.status(400).json(global_response("FAILED", 400, error));
+    const { user_id } = req.body;
+
+    await update_user_account(user_id, error.message);
+
+    res.status(400).json(global_response("Failed", 400, error.message));
   }
 }
 

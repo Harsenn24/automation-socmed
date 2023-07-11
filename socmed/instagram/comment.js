@@ -1,6 +1,7 @@
 const global_response = require("../../global_response");
 const { validate_body_comment } = require("../../helper/validation");
 const helper_comment_ig = require("../../helper/comment.ig");
+const update_user_account = require("../../controller/update.user");
 
 async function comment_ig(req, res) {
   try {
@@ -23,8 +24,11 @@ async function comment_ig(req, res) {
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
-    console.log(error);
-    res.status(400).json(global_response("ERROR", 400, error));
+    const { user_id } = req.body;
+
+    await update_user_account(user_id, error.message);
+
+    res.status(400).json(global_response("Failed", 400, error.message));
   }
 }
 
