@@ -1,10 +1,10 @@
 const { User } = require("../models/index");
 
-async function update_user_account(user_account, error_message) {
+async function update_user_account(user_account, error_message, running_status) {
   try {
     const [result_update] = await User.update(
       {
-        running: false,
+        running: running_status,
         detail: error_message,
       },
       {
