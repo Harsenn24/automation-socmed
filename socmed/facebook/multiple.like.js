@@ -1,6 +1,7 @@
 const global_response = require("../../global_response");
+const helper_like_fb = require("../../helper/like.fb");
+const test_worker = require("../../helper/testworker.js");
 const { validate_body_like } = require("../../helper/validation");
-const processJobs = require("../../helper/worker");
 
 async function like_fb_multiple(req, res) {
   try {
@@ -12,7 +13,12 @@ async function like_fb_multiple(req, res) {
 
     const { user_id, post_link } = req.body;
 
-    const result = await processJobs(user_id, post_link, "fb", "like");
+    const result = await test_worker(
+      user_id,
+      post_link,
+      helper_like_fb,
+      "like"
+    );
 
     res.status(200).json(global_response("Success", 200, result));
   } catch (error) {

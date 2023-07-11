@@ -1,6 +1,7 @@
 const global_response = require("../../global_response");
+const helper_comment_fb = require("../../helper/comment.fb");
+const test_worker = require("../../helper/testworker.js");
 const { validate_body_comment_multiple } = require("../../helper/validation");
-const processJobs = require("../../helper/worker");
 
 async function multiple_comment_fb(req, res) {
   try {
@@ -11,7 +12,12 @@ async function multiple_comment_fb(req, res) {
     }
     const { user_data, post_link } = req.body;
 
-    const result = await processJobs(user_data, post_link, "fb", "comment");
+    const result = await test_worker(
+      user_data,
+      post_link,
+      helper_comment_fb,
+      "comment"
+    );
 
     res.status(200).json(global_response("Success", 200, result));
   } catch (error) {
