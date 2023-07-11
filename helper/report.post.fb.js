@@ -1,11 +1,12 @@
 const { headless_axios, headless_puppeteer } = require("./headless");
-const report_post_terorism = require("./report.fb.post.options/terorism");
+const report_action = require("./report.fb.post.options");
 
 async function helper_report_post_fb(
   user_id,
   post_link,
   headless,
-  report_issue
+  report_issue,
+  sub_report_1
 ) {
   const data = await headless_axios(headless, user_id);
 
@@ -66,8 +67,8 @@ async function helper_report_post_fb(
             el.textContent.trim()
           );
 
-          if (textContent === "Terorisme" && report_issue === "Terorisme") {
-            await report_post_terorism(option);
+          if (textContent === report_issue) {
+            await report_action(option, report_issue, page, sub_report_1);
             break;
           }
         }
@@ -83,7 +84,7 @@ async function helper_report_post_fb(
         console.log(`account ${user_id} : ${error}}`);
         reject(error);
       } finally {
-        await browser.close();
+        // await browser.close();
       }
     }, 5000);
   });
