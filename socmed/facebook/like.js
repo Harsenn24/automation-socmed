@@ -1,6 +1,6 @@
 const global_response = require("../../global_response");
 const helper_like_fb = require("../../helper/like.fb");
-const {validate_body_like} = require("../../helper/validation");
+const { validate_body_like } = require("../../helper/validation");
 
 async function like_fb(req, res) {
   try {
@@ -12,11 +12,12 @@ async function like_fb(req, res) {
 
     const { user_id, post_link } = req.body;
 
-    const final_result = await helper_like_fb(user_id, post_link);
+    const { headless } = req.query;
+
+    const final_result = await helper_like_fb(user_id, post_link, headless);
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
-    console.log(error, "dari errroorrrrrr")
     res.status(400).json(global_response("FAILED", 400, error));
   }
 }

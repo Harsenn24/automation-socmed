@@ -4,7 +4,7 @@ const like_ig = require("../socmed/instagram/like");
 const like_ig_multiple = require("../socmed/instagram/multiple.like");
 const comment_ig_multiple = require("../socmed/instagram/multiple.comment");
 const follow_ig = require("../socmed/instagram/follow");
-const follow_ig_multiple = require("../socmed/instagram/follow.multiple");
+const follow_ig_multiple = require("../socmed/instagram/multiple.follow");
 const ig_router = express.Router();
 
 ig_router.get("/admin-socmed/instagram/comment", comment_ig);

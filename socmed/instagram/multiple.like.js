@@ -13,7 +13,15 @@ async function like_ig_multiple(req, res) {
 
     const { user_id, post_link } = req.body;
 
-    const result = await test_worker(user_id, post_link, helper_like_ig, "like");
+    const { headless } = req.query;
+
+    const result = await test_worker(
+      user_id,
+      post_link,
+      helper_like_ig,
+      "like",
+      headless
+    );
 
     res.status(200).json(global_response("Success", 200, result));
   } catch (error) {

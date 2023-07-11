@@ -1,9 +1,7 @@
-const axios = require("axios");
-const puppeteer = require("puppeteer");
-const url_adspower = process.env.URL_ADSPOWER;
+const { headless_axios, headless_puppeteer } = require("./headless");
 
-async function helper_follow_fb(user_id, profile_link) {
-  const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
+async function helper_follow_fb(user_id, profile_link, headless) {
+  const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
     throw {
@@ -13,10 +11,7 @@ async function helper_follow_fb(user_id, profile_link) {
 
   const puppeteerUrl = data.data.ws.puppeteer;
 
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: puppeteerUrl,
-    headless: true,
-  });
+  const browser = await headless_puppeteer(headless, puppeteerUrl);
 
   const pages = await browser.pages(0);
 
@@ -49,7 +44,7 @@ async function helper_follow_fb(user_id, profile_link) {
       resolve(result_follow);
     }, 5000);
   });
-
+  console.log(`final result : ${final_result}`);
   return final_result;
 }
 

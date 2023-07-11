@@ -13,11 +13,14 @@ async function like_fb_multiple(req, res) {
 
     const { user_id, post_link } = req.body;
 
+    const { headless } = req.query;
+
     const result = await test_worker(
       user_id,
       post_link,
       helper_like_fb,
-      "like"
+      "like",
+      headless
     );
 
     res.status(200).json(global_response("Success", 200, result));

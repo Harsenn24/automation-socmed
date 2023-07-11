@@ -1,9 +1,7 @@
-const axios = require("axios");
-const puppeteer = require("puppeteer");
-const url_adspower = process.env.URL_ADSPOWER;
+const { headless_axios, headless_puppeteer } = require("./headless");
 
-async function helper_comment_ig(user_id, post_link, user_comment) {
-  const { data } = await axios.get(`${url_adspower}${user_id}&headless=1`);
+async function helper_comment_ig(user_id, post_link, user_comment, headless) {
+  const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
     throw {
@@ -12,18 +10,14 @@ async function helper_comment_ig(user_id, post_link, user_comment) {
   }
   const puppeteerUrl = data.data.ws.puppeteer;
 
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: puppeteerUrl,
-    headless: true,
-  });
+  const browser = await headless_puppeteer(headless, puppeteerUrl);
 
   const pages = await browser.pages(0);
 
   const page = pages[0];
 
-  await page.goto(`https://www.instagram.com/p/${post_link}`);
-
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    await page.goto(`https://www.instagram.com/p/${post_link}`);
     setTimeout(async () => {
       try {
         await page.reload();
@@ -43,8 +37,10 @@ async function helper_comment_ig(user_id, post_link, user_comment) {
 
         resolve("Instagram Comment Success");
       } catch (error) {
+        console.log(`account ${user_id} : ${error}}`);
         reject(error);
-        // throw { message: error };
+      } finally {
+        await browser.close();
       }
     }, 5000);
   });
