@@ -31,6 +31,7 @@ async function helper_comment_fb(user_id, post_link, user_comment, headless) {
       await page.keyboard.press("Enter");
 
       resolve("Facebook Comment Success");
+      await browser.close();
     }, 5000);
   });
 }

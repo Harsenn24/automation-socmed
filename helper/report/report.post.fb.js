@@ -81,12 +81,15 @@ async function helper_report_post_fb(
 
         await page.click(selector_send);
 
-        resolve(`success reeport post with ${report_issue} issue`);
+        resolve(
+          `success report post with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
+        );
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
         reject(error);
       } finally {
-        await browser.close();
+        // await browser.close();
+        console.log("ok");
       }
     }, 5000);
   });

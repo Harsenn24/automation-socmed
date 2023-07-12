@@ -1,35 +1,32 @@
 const update_user_account = require("../../controller/update.user");
 const global_response = require("../../global_response");
 const helper_report_post_fb = require("../../helper/report/report.post.fb");
+const test_worker = require("../../helper/testworker.js");
 
-async function report_post_fb(req, res) {
+async function report_post_fb_multiple(req, res) {
   try {
-    const { post_link, user_id, report_issue, sub_report_1 } = req.body;
+    const { post_link, user_data } = req.body;
+
+    console.log(post_link);
+
+    console.log(user_data);
 
     if (!post_link) {
       throw { message: "post link is required" };
     }
 
-    if (!user_id) {
-      throw { message: "user id is required" };
-    }
-
-    if (!report_issue) {
-      throw { message: "report issue is required" };
-    }
-
-    if (!sub_report_1) {
-      throw { message: "sub report is required" };
+    if (!user_data) {
+      throw { message: "user data is required" };
     }
 
     const { headless } = req.query;
 
-    const final_result = await helper_report_post_fb(
-      user_id,
+    const final_result = await test_worker(
+      user_data,
       post_link,
-      headless,
-      report_issue,
-      sub_report_1
+      helper_report_post_fb,
+      "report_post",
+      headless
     );
 
     await update_user_account(user_id, null, true);
@@ -44,4 +41,4 @@ async function report_post_fb(req, res) {
   }
 }
 
-module.exports = report_post_fb;
+module.exports = report_post_fb_multiple;
