@@ -82,6 +82,10 @@ async function helper_report_comment_fb(
               );
 
               if (textContent === report_issue) {
+                if (report_issue === "Terorisme") {
+                  await option.click();
+                  break;
+                }
                 await option.click();
 
                 await sub_report(page, sub_report_1);
