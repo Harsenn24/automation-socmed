@@ -36,19 +36,33 @@ async function test_worker(
             await processNextUser();
             return error;
           }
-        } else if (action === "report_post") {
+        } else if (action === "report_post" || "report_comment") {
           let user_id = by_user.user_id;
           try {
             const report_issue = by_user.report_issue;
             const sub_report = by_user.subReport;
 
-            const process_report = await helper_fn(
-              user_id,
-              post_link,
-              headless,
-              report_issue,
-              sub_report
-            );
+            let process_report;
+
+            if (action === "report_post") {
+              process_report = await helper_fn(
+                user_id,
+                post_link,
+                headless,
+                report_issue,
+                sub_report
+              );
+            } else {
+              const id_comment = by_user.id_comment;
+              process_report = await helper_fn(
+                user_id,
+                post_link,
+                headless,
+                report_issue,
+                sub_report,
+                id_comment
+              );
+            }
 
             const result_success = { user: user_id, message: process_report };
             result.success.push(result_success);

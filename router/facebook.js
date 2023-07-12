@@ -8,6 +8,7 @@ const follow_fb_multiple = require("../socmed/facebook/multiple.follow");
 const report_post_fb = require("../socmed/facebook/report.post");
 const report_post_fb_multiple = require("../socmed/facebook/multiple.report.post");
 const report_comment_fb = require("../socmed/facebook/report.comment");
+const report_comment_fb_multiple = require("../socmed/facebook/multiple.report.comment");
 const fb_router = express.Router();
 
 fb_router.get("/admin-socmed/facebook/like", like_fb);
@@ -30,5 +31,10 @@ fb_router.get(
 );
 
 fb_router.get("/admin-socmed/facebook/report-comment", report_comment_fb);
+
+fb_router.get(
+  "/admin-socmed/facebook/report-comment-multiple",
+  report_comment_fb_multiple
+);
 
 module.exports = fb_router;
