@@ -1,3 +1,4 @@
+const update_user_account = require("../controller/update.user");
 const { headless_axios, headless_puppeteer } = require("./headless");
 
 async function helper_posting_status_fb(
@@ -93,8 +94,11 @@ async function helper_posting_status_fb(
           }, 5000);
         }
 
+        await update_user_account(user_id, null, true);
+
         resolve(`success posting status account ${user_id}`);
       } catch (error) {
+        await update_user_account(user_id, error.message, false);
         reject(`error account ${user_id} : ${error}`);
       } finally {
         // await browser.close();

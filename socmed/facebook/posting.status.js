@@ -13,7 +13,7 @@ async function posting_status_fb(req, res) {
       headless
     );
 
-    res.status(200).json(global_response("Success", 200, "ok"));
+    res.status(200).json(global_response("Success", 200, final_result));
   } catch (error) {
     res.status(400).json(global_response("FAILED", 400, error.message));
   }
