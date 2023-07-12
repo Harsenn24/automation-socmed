@@ -36,44 +36,57 @@ async function helper_posting_status_fb(
 
         await page.click(selector_typing);
 
-        let selector_posting_target =
-          'span[class^="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x676frb x1lkfr7t x1lbecb7 xk50ysn xzsf02u x1yc453h"]';
+        setTimeout(async () => {
+          let words = [];
 
-        await page.waitForTimeout(5000);
+          let title_option =
+            'span[class^="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft x1120s5i"]';
 
-        const isSelectorAvailable = await page.evaluate((selector) => {
-          const element = document.querySelector(selector);
-          return element !== null;
-        }, selector_posting_target);
+          await page.waitForSelector(title_option);
 
-        if (isSelectorAvailable) {
-          console.log("Selector is available on the page.");
-
-          await page.waitForSelector(selector_posting_target, {
-            timeout: 5000,
-          });
-
-          const options_choose = await page.$$(selector_posting_target);
+          const options_choose = await page.$$(title_option);
 
           for (const option of options_choose) {
             const textContent = await option.evaluate((el) =>
               el.textContent.trim()
             );
 
-            if (textContent === "Publik") {
-              await option.click();
-              break;
-            }
+            words.push(textContent);
           }
 
-          const selector_choose_target =
-            'div[class="x1i10hfl xjbqb8w x6umtig x1b1mbwd xaqea5y xav7gou x1ypdohk xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x87ps6o x1lku1pv x1a2a7pz x9f619 x3nfvp2 xdt5ytf xl56j7k x1n2onr6 xh8yej3"]';
+          if (
+            words.includes("Pemirsa default") &&
+            words.includes("Buat postingan")
+          ) {
+            const selector_posting_target =
+              'span[class^="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x676frb x1lkfr7t x1lbecb7 xk50ysn xzsf02u x1yc453h"]';
 
-          await page.waitForSelector(selector_choose_target);
+            await page.waitForSelector(selector_posting_target, {
+              visible: true,
+            });
 
-          await page.click(selector_choose_target);
-        } else {
-          console.log("Selector is not available on the page.");
+            const options_choose = await page.$$(selector_posting_target);
+
+            for (const option of options_choose) {
+              const textContent = await option.evaluate((el) =>
+                el.textContent.trim()
+              );
+
+              if (textContent === "Publik") {
+                await option.click();
+                break;
+              }
+            }
+
+            setTimeout(async () => {
+              const send_status_selector = 'div[aria-label="Selesai"]';
+              await page.waitForSelector(send_status_selector, {
+                visible: true,
+              });
+
+              await page.click(send_status_selector);
+            }, 5000);
+          }
 
           const typing_selector =
             'div[class="xzsf02u x1a2a7pz x1n2onr6 x14wi4xw x9f619 x1lliihq x5yr21d xh8yej3 notranslate"]';
@@ -92,11 +105,11 @@ async function helper_posting_status_fb(
 
             await page.click(send_status_selector);
           }, 5000);
-        }
 
-        await update_user_account(user_id, null, true);
+          await update_user_account(user_id, null, true);
 
-        resolve(`success posting status account ${user_id}`);
+          resolve(`success posting status account ${user_id}`);
+        }, 5000);
       } catch (error) {
         await update_user_account(user_id, error.message, false);
         reject(`error account ${user_id} : ${error}`);

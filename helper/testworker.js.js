@@ -36,7 +36,7 @@ async function test_worker(
             await processNextUser();
             return error;
           }
-        } else if (action === "report_post" || "report_comment") {
+        } else if (action === "report_post" || action === "report_comment") {
           let user_id = by_user.user_id;
           try {
             const report_issue = by_user.report_issue;
@@ -65,6 +65,23 @@ async function test_worker(
             }
 
             const result_success = { user: user_id, message: process_report };
+            result.success.push(result_success);
+          } catch (error) {
+            const result_failed = { user: user_id, message: error.message };
+            result.failed.push(result_failed);
+            await processNextUser();
+            return error;
+          }
+        } else if (action === "posting_status") {
+          let user_message = by_user.user_status_message;
+          let user_id = by_user.user_id;
+
+          try {
+            const result_success = await helper_fn(
+              user_id,
+              user_message,
+              headless
+            );
             result.success.push(result_success);
           } catch (error) {
             const result_failed = { user: user_id, message: error.message };
