@@ -73,14 +73,26 @@ async function test_worker(
             return error;
           }
         } else if (action === "posting_status") {
-          let user_message = by_user.user_status_message;
           let user_id = by_user.user_id;
+          let user_message = by_user.status_message;
+          let image_video = by_user.image_video;
+          let feeling_activity = by_user.feeling_activity;
+
+          if (!image_video) {
+            image_video = "";
+          }
+
+          if (!feeling_activity) {
+            feeling_activity = "";
+          }
 
           try {
             const result_success = await helper_fn(
               user_id,
               user_message,
-              headless
+              headless,
+              image_video,
+              feeling_activity
             );
             result.success.push(result_success);
           } catch (error) {

@@ -3,9 +3,13 @@ const helper_posting_status_fb = require("../../helper/posting.status.fb");
 
 async function posting_status_fb(req, res) {
   try {
-    let { user_id, status_message, image_video } = req.body;
+    let { user_id, status_message, image_video, feeling_activity } = req.body;
 
     if (!image_video) {
+      image_video = "";
+    }
+
+    if (!feeling_activity) {
       image_video = "";
     }
 
@@ -15,7 +19,8 @@ async function posting_status_fb(req, res) {
       user_id,
       status_message,
       headless,
-      image_video
+      image_video,
+      feeling_activity
     );
 
     res.status(200).json(global_response("Success", 200, final_result));

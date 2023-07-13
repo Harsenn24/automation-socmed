@@ -6,7 +6,8 @@ async function helper_posting_status_fb(
   user_id,
   user_status_message,
   headless,
-  image_video
+  image_video,
+  feeling_activity
 ) {
   const data = await headless_axios(headless, user_id);
 
@@ -34,7 +35,10 @@ async function helper_posting_status_fb(
         const selector_typing =
           'div[class="x1i10hfl x6umtig x1b1mbwd xaqea5y xav7gou x9f619 x1ypdohk xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x16tdsg8 x1hl2dhg xggy1nq x87ps6o x1lku1pv x1a2a7pz x6s0dn4 xmjcpbm x107yiy2 xv8uw2v x1tfwpuw x2g32xy x78zum5 x1q0g3np x1iyjqo2 x1nhvcw1 x1n2onr6 xt7dq6l x1ba4aug x1y1aw1k xn6708d xwib8y2 x1ye3gou"]';
 
-        await page.waitForSelector(selector_typing);
+        await page.waitForSelector(selector_typing, {
+          visible: true,
+          timeout: 5000,
+        });
 
         await page.click(selector_typing);
 
@@ -99,6 +103,8 @@ async function helper_posting_status_fb(
 
           await page.type(typing_selector, user_status_message);
 
+          console.log(`typing status done: ${user_id} `);
+
           if (image_video !== "") {
             await page.click('div[aria-label="Foto/video"]');
 
@@ -109,9 +115,34 @@ async function helper_posting_status_fb(
               `../upload/${image_video}`
             );
 
-            console.log(path_upload, "lokasi upload");
-
             input_file.uploadFile(path_upload);
+
+            console.log(`upload video / image done : ${user_id}`);
+          }
+
+          if (feeling_activity !== "") {
+            await page.click('div[aria-label="Perasaan/aktivitas"]');
+
+            let selector_feeling_activity =
+              'div[class="x1i10hfl x1qjc9v5 xjbqb8w xjqpnuy xa49m3k xqeqjp1 x2hbi6w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x1q0g3np x87ps6o x1lku1pv x78zum5 x1a2a7pz xh8yej3"]';
+
+            await page.waitForSelector(selector_feeling_activity, {
+              visible: true,
+            });
+
+            const elements = await page.$$(selector_feeling_activity);
+
+            for (const element of elements) {
+              const label = await page.evaluate(
+                (el) => el.getAttribute("aria-label"),
+                element
+              );
+              if (label.includes(feeling_activity)) {
+                await element.click();
+                console.log(`posting feeling activity done: ${user_id} `);
+                break;
+              }
+            }
           }
 
           setTimeout(async () => {
@@ -121,17 +152,21 @@ async function helper_posting_status_fb(
             });
 
             await page.click(send_status_selector);
+
+            await update_user_account(user_id, null, true);
+
+            console.log(`success posting status account ${user_id}`)
+
+            resolve(`success posting status account ${user_id}`);
+
+            await browser.close();
           }, 5000);
-
-          await update_user_account(user_id, null, true);
-
-          resolve(`success posting status account ${user_id}`);
         }, 5000);
       } catch (error) {
         await update_user_account(user_id, error.message, false);
+        await browser.close()
         reject(`error account ${user_id} : ${error}`);
       } finally {
-        // await browser.close();
         console.log("oke");
       }
     }, 8000);
