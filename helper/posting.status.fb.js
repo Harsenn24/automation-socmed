@@ -1,10 +1,12 @@
 const update_user_account = require("../controller/update.user");
 const { headless_axios, headless_puppeteer } = require("./headless");
+const path = require("path");
 
 async function helper_posting_status_fb(
   user_id,
   user_status_message,
-  headless
+  headless,
+  image_video
 ) {
   const data = await headless_axios(headless, user_id);
 
@@ -96,6 +98,21 @@ async function helper_posting_status_fb(
           });
 
           await page.type(typing_selector, user_status_message);
+
+          if (image_video !== "") {
+            await page.click('div[aria-label="Foto/video"]');
+
+            const input_file = await page.$('input[class="x1s85apg"]');
+
+            const path_upload = path.join(
+              __dirname,
+              `../upload/${image_video}`
+            );
+
+            console.log(path_upload, "lokasi upload");
+
+            input_file.uploadFile(path_upload);
+          }
 
           setTimeout(async () => {
             const send_status_selector = 'div[aria-label="Kirim"]';

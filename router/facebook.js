@@ -39,9 +39,9 @@ fb_router.get(
   report_comment_fb_multiple
 );
 
-fb_router.post("/admin-socmed/facebook/posting-status", posting_status_fb);
+fb_router.get("/admin-socmed/facebook/posting-status", posting_status_fb);
 
-fb_router.post(
+fb_router.get(
   "/admin-socmed/facebook/posting-status-multiple",
   posting_status_fb_multiple
 );

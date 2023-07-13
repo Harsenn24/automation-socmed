@@ -27,6 +27,5 @@ async function posting_status_fb_multiple(req, res) {
 }
 
 
-// async function worker_status
 
 module.exports = posting_status_fb_multiple;
