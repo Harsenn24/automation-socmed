@@ -27,6 +27,8 @@ async function helper_report_comment_fb(
 
   await page.goto(post_link);
 
+  console.log(comment_link_input, "====> comment link input");
+
   let final_result = await new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
@@ -43,6 +45,7 @@ async function helper_report_comment_fb(
           const hrefValue = await element.evaluate((node) =>
             node.getAttribute("href")
           );
+
           if (hrefValue === comment_link_input) {
             console.log(true);
 
@@ -92,7 +95,7 @@ async function helper_report_comment_fb(
                 break;
               }
             }
-          }
+          } 
         }
 
         let selector_send = 'div[aria-label="Kirim"]';
