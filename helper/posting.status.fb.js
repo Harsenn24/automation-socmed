@@ -122,30 +122,30 @@ async function helper_posting_status_fb(
             console.log(`upload video / image done : ${user_id}`);
           }
 
-          // if (feeling_activity !== "") {
-          //   await page.click('div[aria-label="Perasaan/aktivitas"]');
+          if (feeling_activity !== "") {
+            await page.click('div[aria-label="Perasaan/aktivitas"]');
 
-          //   let selector_feeling_activity =
-          //     'div[class="x1i10hfl x1qjc9v5 xjbqb8w xjqpnuy xa49m3k xqeqjp1 x2hbi6w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x1q0g3np x87ps6o x1lku1pv x78zum5 x1a2a7pz xh8yej3"]';
+            let selector_feeling_activity =
+              'div[class="x1i10hfl x1qjc9v5 xjbqb8w xjqpnuy xa49m3k xqeqjp1 x2hbi6w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x1q0g3np x87ps6o x1lku1pv x78zum5 x1a2a7pz xh8yej3"]';
 
-          //   await page.waitForSelector(selector_feeling_activity, {
-          //     visible: true,
-          //   });
+            await page.waitForSelector(selector_feeling_activity, {
+              visible: true,
+            });
 
-          //   const elements = await page.$$(selector_feeling_activity);
+            const elements = await page.$$(selector_feeling_activity);
 
-          //   for (const element of elements) {
-          //     const label = await page.evaluate(
-          //       (el) => el.getAttribute("aria-label"),
-          //       element
-          //     );
-          //     if (label.includes(feeling_activity)) {
-          //       await element.click();
-          //       console.log(`posting feeling activity done: ${user_id} `);
-          //       break;
-          //     }
-          //   }
-          // }
+            for (const element of elements) {
+              const label = await page.evaluate(
+                (el) => el.getAttribute("aria-label"),
+                element
+              );
+              if (label.includes(feeling_activity)) {
+                await element.click();
+                console.log(`posting feeling activity done: ${user_id} `);
+                break;
+              }
+            }
+          }
 
           setTimeout(async () => {
             const send_status_selector = 'div[aria-label="Kirim"]';
@@ -166,11 +166,8 @@ async function helper_posting_status_fb(
         }, 5000);
       } catch (error) {
         await update_user_account(user_id, error.message, false);
-        await browser.close();
         reject(`error account ${user_id} : ${error}`);
-      } finally {
-        console.log("oke");
-      }
+      } 
     }, 8000);
   });
 }

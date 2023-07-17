@@ -86,6 +86,8 @@ async function helper_report_post_fb(
 
         await page.click(selector_send);
 
+        console.log(user_id + " success report facebook post");
+
         await update_user_account(user_id, null, true);
 
         resolve(

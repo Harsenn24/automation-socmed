@@ -18,20 +18,26 @@ async function helper_comment_fb(user_id, post_link, user_comment, headless) {
 
   await page.goto(post_link);
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     setTimeout(async () => {
-      await page.reload();
+      try {
+        await page.reload();
 
-      await page.waitForSelector('div[aria-label="Tulis komentar"]', {
-        visible: true,
-      });
+        await page.waitForSelector('div[aria-label="Tulis komentar"]', {
+          visible: true,
+        });
 
-      await page.type('div[aria-label="Tulis komentar"]', user_comment);
+        await page.type('div[aria-label="Tulis komentar"]', user_comment);
 
-      await page.keyboard.press("Enter");
+        await page.keyboard.press("Enter");
 
-      resolve("Facebook Comment Success");
-      await browser.close();
+        console.log(user_id + " success comment facebook");
+
+        resolve("Facebook comment Success");
+        // await browser.close();
+      } catch (error) {
+        reject(error.message);
+      }
     }, 5000);
   });
 }

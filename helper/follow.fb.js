@@ -19,29 +19,37 @@ async function helper_follow_fb(user_id, profile_link, headless) {
 
   await page.goto(profile_link);
 
-  let final_result = await new Promise((resolve) => {
+  let final_result = await new Promise((resolve, reject) => {
     setTimeout(async () => {
-      await page.reload();
+      try {
+        await page.reload();
 
-      await page.waitForSelector(
-        ".x1lliihq.x6ikm8r.x10wlt62.x1n2onr6.xlyipyv.xuxw1ft"
-      );
+        await page.waitForSelector(
+          ".x1lliihq.x6ikm8r.x10wlt62.x1n2onr6.xlyipyv.xuxw1ft"
+        );
 
-      const result_follow = await page.$$eval(
-        ".x1lliihq.x6ikm8r.x10wlt62.x1n2onr6.xlyipyv.xuxw1ft",
-        (elements) => {
-          for (const element of elements) {
-            if (element.textContent === "Ikuti") {
-              element.click();
-              return "Success follow facebook account";
-            } else if (element.textContent === "Mengikuti") {
-              return "You already followed this facebook account";
+        const result_follow = await page.$$eval(
+          ".x1lliihq.x6ikm8r.x10wlt62.x1n2onr6.xlyipyv.xuxw1ft",
+          (elements) => {
+            for (const element of elements) {
+              if (element.textContent === "Ikuti") {
+                element.click();
+                return "Success follow facebook account";
+              } else if (element.textContent === "Mengikuti") {
+                return "You already followed this facebook account";
+              }
             }
           }
-        }
-      );
+        );
 
-      resolve(result_follow);
+        console.log(user_id + " success follow facebook");
+
+        resolve(result_follow);
+
+        // await browser.close();
+      } catch (error) {
+        reject(error.message);
+      }
     }, 5000);
   });
   console.log(`final result : ${final_result}`);
