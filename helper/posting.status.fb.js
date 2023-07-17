@@ -108,14 +108,20 @@ async function helper_posting_status_fb(
           if (image_video !== "") {
             await page.click('div[aria-label="Foto/video"]');
 
-            await page.waitForSelector('input[class="x1s85apg"]');
+            let selector_1 = 'input[class="x1s85apg"]';
 
-            const input_file = await page.$('input[class="x1s85apg"]');
+            let selector_2 =
+              'input[class="x1s85apg"][accept="image/*,image/heif,image/heic,video/*,video/mp4,video/x-m4v,video/x-matroska,.mkv"][type="file"]';
+
+            await page.waitForSelector(selector_2);
+
+            const input_file = await page.$(selector_2);
 
             const path_upload = path.join(
               __dirname,
               `../upload/${image_video}`
             );
+
 
             await input_file.uploadFile(path_upload);
 
@@ -167,7 +173,7 @@ async function helper_posting_status_fb(
       } catch (error) {
         await update_user_account(user_id, error.message, false);
         reject(`error account ${user_id} : ${error}`);
-      } 
+      }
     }, 8000);
   });
 }
