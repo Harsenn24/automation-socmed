@@ -17,8 +17,6 @@ async function helper_report_comment_fb(
     };
   }
 
-  console.log(data);
-
   const puppeteerUrl = data.data.ws.puppeteer;
 
   const browser = await headless_puppeteer(headless, puppeteerUrl);
@@ -46,9 +44,14 @@ async function helper_report_comment_fb(
             node.getAttribute("href")
           );
 
+          console.log(hrefValue);
+
           if (hrefValue === comment_link_input) {
             console.log(true);
             let selector_three_spot = 'div[class="x1hy63sm xg01cxk xhva3ql"]';
+
+            // let selector_three_spot =
+            //   'div[aria-label="Sembunyikan atau laporkan ini"][aria-haspopup="menu"]';
 
             await page.waitForSelector(selector_three_spot);
 
