@@ -19,9 +19,7 @@ async function like_fb(req, res) {
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
-    const { user_id } = req.body;
-
-    await update_user_account(user_id, error.message, false);
+    console.log(error);
 
     res.status(400).json(global_response("Failed", 400, error.message));
   }
