@@ -1,4 +1,5 @@
 const { headless_axios, headless_puppeteer } = require("../headless");
+const screenshoot = require("../screenshoot");
 const sub_report = require("./sub.report");
 
 async function helper_report_comment_fb(
@@ -44,7 +45,9 @@ async function helper_report_comment_fb(
             node.getAttribute("href")
           );
 
-          console.log(hrefValue);
+          console.log(hrefValue, "href value");
+
+          console.log(comment_link_input, "comment link input");
 
           if (hrefValue === comment_link_input) {
             console.log(true);
@@ -102,6 +105,8 @@ async function helper_report_comment_fb(
             await page.waitForSelector(selector_send);
 
             await page.click(selector_send);
+
+            await screenshoot(page, user_id, "report-comment-FB");
 
             console.log(user_id + " success report facebook comment");
 

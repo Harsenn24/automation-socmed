@@ -91,6 +91,8 @@ async function helper_posting_status_fb(
               });
 
               await page.click(send_status_selector);
+
+              await screenshoot(page, user_id, "posting-status-FB");
             }, 5000);
           }
 
@@ -121,7 +123,6 @@ async function helper_posting_status_fb(
               __dirname,
               `../upload/${image_video}`
             );
-
 
             await input_file.uploadFile(path_upload);
 
