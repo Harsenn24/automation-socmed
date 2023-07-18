@@ -35,6 +35,8 @@ async function screenshoot(page, user_id, activity) {
 
     const check_folder_user = fs.existsSync(folder_path_user);
 
+    console.log(check_folder_user)
+
     if (!check_folder_user) {
       fs.mkdirSync(folder_path_user);
     }

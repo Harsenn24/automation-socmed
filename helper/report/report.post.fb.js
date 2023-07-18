@@ -93,11 +93,11 @@ async function helper_report_post_fb(
           console.log(user_id + " success report facebook post");
 
           await update_user_account(user_id, null, true);
-        }, 8000);
 
-        resolve(
-          `success report post with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
-        );
+          resolve(
+            `success report post with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
+          );
+        }, 8000);
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
         await update_user_account(user_id, error.message, false);
