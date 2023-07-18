@@ -46,7 +46,7 @@ async function helper_follow_fb(user_id, profile_link, headless) {
 
         resolve(result_follow);
 
-        // await browser.close();
+        await browser.close();
       } catch (error) {
         reject(error.message);
       }

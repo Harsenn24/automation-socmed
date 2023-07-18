@@ -112,6 +112,8 @@ async function helper_report_comment_fb(
           resolve(
             `success report command with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
           );
+
+          await browser.close();
         }, 8000);
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);

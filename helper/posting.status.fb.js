@@ -169,7 +169,7 @@ async function helper_posting_status_fb(
 
             resolve(`success posting status account ${user_id}`);
 
-            // await browser.close();
+            await browser.close();
           }, 5000);
         }, 5000);
       } catch (error) {

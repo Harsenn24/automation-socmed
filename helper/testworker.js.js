@@ -1,4 +1,6 @@
 const update_user_account = require("../controller/update.user");
+const check_feeling_activity_fb = require("./check_feeling_activity_fb");
+const check_report_issue = require("./check_report_issue");
 
 async function test_worker(
   users_queue,
@@ -42,6 +44,15 @@ async function test_worker(
             const report_issue = by_user.report_issue;
             const sub_report = by_user.subReport;
 
+            const check_input = await check_report_issue(
+              report_issue,
+              sub_report
+            );
+
+            if (check_input) {
+              throw { message: check_input.message };
+            }
+
             let process_report;
 
             if (action === "report_post") {
@@ -77,6 +88,14 @@ async function test_worker(
           let user_message = by_user.status_message;
           let image_video = by_user.image_video;
           let feeling_activity = by_user.feeling_activity;
+
+          const check_feeling_activity = await check_feeling_activity_fb(
+            feeling_activity
+          );
+
+          if (check_feeling_activity) {
+            throw { message: check_feeling_activity.message };
+          }
 
           if (!image_video) {
             image_video = "";

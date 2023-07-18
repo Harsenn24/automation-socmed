@@ -6,10 +6,6 @@ async function report_post_fb_multiple(req, res) {
   try {
     const { post_link, user_data } = req.body;
 
-    console.log(post_link);
-
-    console.log(user_data);
-
     if (!post_link) {
       throw { message: "post link is required" };
     }
