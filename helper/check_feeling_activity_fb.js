@@ -8,6 +8,7 @@ async function check_feeling_activity_fb(input) {
       if (element.feeling_activity !== input) {
         throw { message: "input feeling activity is not match!" };
       }
+
     }
   } catch (error) {
     return error;

@@ -1,10 +1,17 @@
 const update_user_account = require("../../controller/update.user");
 const global_response = require("../../global_response");
+const check_report_issue = require("../../helper/check_report_issue");
 const helper_report_post_fb = require("../../helper/report/report.post.fb");
 
 async function report_post_fb(req, res) {
   try {
     const { post_link, user_id, report_issue, sub_report_1 } = req.body;
+
+    const check_report = await check_report_issue(report_issue, sub_report_1);
+
+    if (check_report) {
+      throw { message: check_report.message };
+    }
 
     if (!post_link) {
       throw { message: "post link is required" };
