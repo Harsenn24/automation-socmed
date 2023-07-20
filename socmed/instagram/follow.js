@@ -1,6 +1,6 @@
 const update_user_account = require("../../controller/update.user");
 const global_response = require("../../global_response");
-const helper_follow_ig = require("../../helper/follow.ig");
+const helper_follow_ig = require("../../helper/instagram/follow.ig");
 const { validate_body_follow } = require("../../helper/validation");
 
 async function follow_ig(req, res) {

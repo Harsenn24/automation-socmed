@@ -1,5 +1,5 @@
-const { headless_axios, headless_puppeteer } = require("./headless");
-const screenshoot = require("./screenshoot");
+const { headless_axios, headless_puppeteer } = require("../headless");
+const screenshoot = require("../screenshoot");
 
 async function helper_comment_fb(user_id, post_link, user_comment, headless) {
   const data = await headless_axios(headless, user_id);
@@ -41,6 +41,7 @@ async function helper_comment_fb(user_id, post_link, user_comment, headless) {
         await browser.close();
       } catch (error) {
         console.log(error);
+        await browser.close()
         reject(error.message);
       }
     }, 5000);

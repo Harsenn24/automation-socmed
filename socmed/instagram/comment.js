@@ -1,7 +1,7 @@
 const global_response = require("../../global_response");
 const { validate_body_comment } = require("../../helper/validation");
-const helper_comment_ig = require("../../helper/comment.ig");
 const update_user_account = require("../../controller/update.user");
+const helper_comment_ig = require("../../helper/instagram/comment.ig");
 
 async function comment_ig(req, res) {
   try {

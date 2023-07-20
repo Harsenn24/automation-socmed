@@ -1,7 +1,7 @@
 async function check_feeling_activity_fb(input) {
   try {
     console.log(input);
-    const list_feeling_activity = require("../data_adspower/feeeling.json");
+    const list_feeling_activity = require("../../data_adspower/feeeling.json");
 
     console.log(list_feeling_activity);
 

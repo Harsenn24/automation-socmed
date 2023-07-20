@@ -1,6 +1,5 @@
-const update_user_account = require("../../controller/update.user");
 const global_response = require("../../global_response");
-const helper_like_fb = require("../../helper/like.fb");
+const helper_like_fb = require("../../helper/facebook/like.fb");
 const { validate_body_like } = require("../../helper/validation");
 
 async function like_fb(req, res) {

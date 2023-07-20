@@ -1,4 +1,4 @@
-const { headless_axios, headless_puppeteer } = require("./headless");
+const { headless_axios, headless_puppeteer } = require("../headless");
 
 async function helper_like_ig(user_id, post_link, headless) {
   const data = await headless_axios(headless, user_id);

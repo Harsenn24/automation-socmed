@@ -1,7 +1,7 @@
 const global_response = require("../../global_response");
 const { validate_body_follow } = require("../../helper/validation");
-const helper_follow_fb = require("../../helper/follow.fb");
 const update_user_account = require("../../controller/update.user");
+const helper_follow_fb = require("../../helper/facebook/follow.fb");
 
 async function follow_fb(req, res) {
   try {

@@ -1,7 +1,7 @@
 const global_response = require("../../global_response");
-const helper_follow_ig = require("../../helper/follow.ig");
-const test_worker = require("../../helper/testworker.js.js");
+const helper_follow_ig = require("../../helper/instagram/follow.ig");
 const { validate_body_follow } = require("../../helper/validation");
+const test_worker = require("../../helper/worker/worker");
 
 async function follow_ig_multiple(req, res) {
   try {

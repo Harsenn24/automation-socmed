@@ -1,6 +1,6 @@
-const { headless_axios, headless_puppeteer } = require("./headless");
+const { headless_axios, headless_puppeteer } = require("../headless");
 
-async function helper_follow_ig(user_id, profile_link, headless) {
+async function helper_follow_fb(user_id, profile_link, headless) {
   const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
@@ -24,33 +24,36 @@ async function helper_follow_ig(user_id, profile_link, headless) {
       try {
         await page.reload();
 
-        await page.waitForSelector("._aacl._aaco._aacw._aad6._aade");
+        await page.waitForSelector(
+          ".x1lliihq.x6ikm8r.x10wlt62.x1n2onr6.xlyipyv.xuxw1ft"
+        );
 
         const result_follow = await page.$$eval(
-          "._aacl._aaco._aacw._aad6._aade",
+          ".x1lliihq.x6ikm8r.x10wlt62.x1n2onr6.xlyipyv.xuxw1ft",
           (elements) => {
             for (const element of elements) {
               if (element.textContent === "Ikuti") {
                 element.click();
-                return "Success follow instagram account";
-              } else if (element.textContent === "Diikuti") {
-                return "You already follow this instagram account";
+                return "Success follow facebook account";
+              } else if (element.textContent === "Mengikuti") {
+                return "You already followed this facebook account";
               }
             }
           }
         );
 
+        console.log(user_id + " success follow facebook");
+
         resolve(result_follow);
-      } catch (error) {
-        console.log(`account ${user_id} : ${error}}`);
-        reject(error);
-      } finally {
+
         await browser.close();
+      } catch (error) {
+        reject(error.message);
       }
     }, 5000);
   });
-
+  console.log(`final result : ${final_result}`);
   return final_result;
 }
 
-module.exports = helper_follow_ig;
+module.exports = helper_follow_fb;

@@ -1,7 +1,7 @@
 const global_response = require("../../global_response");
-const helper_like_fb = require("../../helper/like.fb");
-const test_worker = require("../../helper/testworker.js");
+const test_worker = require("../../helper/worker/worker.js");
 const { validate_body_like } = require("../../helper/validation");
+const helper_like_fb = require("../../helper/facebook/like.fb");
 
 async function like_fb_multiple(req, res) {
   try {

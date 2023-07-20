@@ -1,7 +1,7 @@
 const global_response = require("../../global_response");
 const { validate_body_like } = require("../../helper/validation");
-const helper_like_ig = require("../../helper/like.ig");
 const update_user_account = require("../../controller/update.user");
+const helper_like_ig = require("../../helper/instagram/like.ig");
 
 async function like_ig(req, res) {
   try {

@@ -1,6 +1,6 @@
 const global_response = require("../../global_response");
-const check_feeling_activity_fb = require("../../helper/check_feeling_activity_fb");
-const helper_posting_status_fb = require("../../helper/posting.status.fb");
+const check_feeling_activity_fb = require("../../helper/facebook/check_feeling_activity_fb");
+const helper_posting_status_fb = require("../../helper/facebook/posting.status.fb");
 
 async function posting_status_fb(req, res) {
   try {

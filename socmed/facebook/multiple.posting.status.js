@@ -1,6 +1,6 @@
 const global_response = require("../../global_response");
-const helper_posting_status_fb = require("../../helper/posting.status.fb");
-const test_worker = require("../../helper/testworker.js.js");
+const helper_posting_status_fb = require("../../helper/facebook/posting.status.fb");
+const test_worker = require("../../helper/worker/worker.js");
 
 async function posting_status_fb_multiple(req, res) {
   try {
