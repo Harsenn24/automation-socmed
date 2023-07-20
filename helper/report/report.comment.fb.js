@@ -33,74 +33,76 @@ async function helper_report_comment_fb(
       try {
         await page.reload();
 
-        let selector_comment =
-          ".x1i10hfl.xjbqb8w.x6umtig.x1b1mbwd.xaqea5y.xav7gou.x9f619.x1ypdohk.xt0psk2.xe8uvvx.xdj266r.x11i5rnm.xat24cr.x1mh8g0r.xexx8yu.x4uap5.x18d9i69.xkhd6sd.x16tdsg8.x1hl2dhg.xggy1nq.x1a2a7pz.x1heor9g.xt0b8zv";
+        const commentSelector =
+          "div.x1r8uery.x1iyjqo2.x6ikm8r.x10wlt62.x1pi30zi";
 
-        await page.waitForSelector(selector_comment);
+        const commentElements = await page.$$(commentSelector);
 
-        const elements = await page.$$(selector_comment);
-
-        for (const element of elements) {
-          const hrefValue = await element.evaluate((node) =>
-            node.getAttribute("href")
+        for (const commentElement of commentElements) {
+          const href = await page.evaluate(
+            (element) => element.querySelector("a").href,
+            commentElement
           );
 
-          if (hrefValue === comment_link_input) {
-            console.log(true);
+          if (href.includes(comment_link_input)) {
+            const specificDivSelector =
+              "div.x1i10hfl.x1qjc9v5.xjqpnuy.xa49m3k.xqeqjp1.x2hbi6w.x9f619.x1ypdohk.xdl72j9.x2lah0s.xe8uvvx.x2lwn1j.xeuugli.x16tdsg8.x1hl2dhg.xggy1nq.x1ja2u2z.x1t137rt.x1o1ewxj.x3x9cwd.x1e5q0jg.x13rtm0m.x1q0g3np.x87ps6o.x1lku1pv.x1a2a7pz.xjyslct.xjbqb8w.x13fuv20.xu3j5b3.x1q0q8m5.x26u7qi.x972fbf.xcfux6l.x1qhh985.xm0m39n.x3nfvp2.xdj266r.x11i5rnm.xat24cr.x1mh8g0r.xexx8yu.x4uap5.x18d9i69.xkhd6sd.x1n2onr6.x3ajldb.x194ut8o.x1vzenxt.xd7ygy7.xt298gk.x1xhcax0.x1s928wv.x10pfhc2.x1j6awrg.x1v53gu8.x1tfg27r.xitxdhh";
 
-            let selector_three_spot = 'div[class="x1hy63sm xg01cxk xhva3ql"]';
+            const specificDiv = await commentElement.$(specificDivSelector);
 
-            await page.waitForSelector(selector_three_spot);
-
-            await page.click(selector_three_spot);
-
-            let selector_options =
-              'span[class^="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xk50ysn xzsf02u x1yc453h"]';
-
-            await page.waitForSelector(selector_options);
-
-            const options_choose = await page.$$(selector_options);
-
-            for (const option of options_choose) {
-              const textContent = await option.evaluate((el) =>
-                el.textContent.trim()
-              );
-              if (textContent === "Laporkan komentar") {
-                await option.click();
-                break;
-              }
-            }
-
-            let selector_report_options =
-              'span[class^="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x676frb x1lkfr7t x1lbecb7 xk50ysn xzsf02u x1yc453h"]';
-
-            await page.waitForSelector(selector_report_options);
-
-            const option_report = await page.$$(selector_report_options);
-
-            for (const option of option_report) {
-              const textContent = await option.evaluate((el) =>
-                el.textContent.trim()
-              );
-
-              if (textContent === report_issue) {
-                if (report_issue === "Terorisme") {
-                  await option.click();
-                  break;
-                }
-                await option.click();
-
-                await sub_report(page, sub_report_1);
-                break;
-              }
-            }
-            let selector_send = 'div[aria-label="Kirim"]';
-
-            await page.waitForSelector(selector_send);
-
-            await page.click(selector_send);
+            await specificDiv.click();
+            break;
           }
         }
+
+        let selector_options =
+          'span[class="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xk50ysn xzsf02u x1yc453h"]';
+
+        await page.waitForSelector(selector_options);
+
+        const options_choose = await page.$$(selector_options);
+
+        for (const option of options_choose) {
+          const textContent = await option.evaluate((el) =>
+            el.textContent.trim()
+          );
+
+          console.log(textContent, "isi text content");
+
+          if (textContent.includes("Laporkan komentar")) {
+            await option.click();
+            // break;
+          }
+        }
+
+        let selector_report_options =
+          'span[class^="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x676frb x1lkfr7t x1lbecb7 xk50ysn xzsf02u x1yc453h"]';
+
+        await page.waitForSelector(selector_report_options);
+
+        const option_report = await page.$$(selector_report_options);
+
+        for (const option of option_report) {
+          const textContent = await option.evaluate((el) =>
+            el.textContent.trim()
+          );
+
+          if (textContent === report_issue) {
+            if (report_issue === "Terorisme") {
+              await option.click();
+              break;
+            }
+            await option.click();
+
+            await sub_report(page, sub_report_1);
+            break;
+          }
+        }
+        let selector_send = 'div[aria-label="Kirim"]';
+
+        await page.waitForSelector(selector_send);
+
+        await page.click(selector_send);
 
         setTimeout(async () => {
           await screenshoot(page, user_id, "report-comment-FB");
@@ -114,9 +116,6 @@ async function helper_report_comment_fb(
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
         reject(error);
-      } finally {
-        // await browser.close();
-        console.log("ok");
       }
     }, 5000);
   });
