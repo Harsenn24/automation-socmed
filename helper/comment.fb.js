@@ -37,7 +37,8 @@ async function helper_comment_fb(user_id, post_link, user_comment, headless) {
         await screenshoot(page, user_id, "comment-FB");
 
         resolve("Facebook comment Success");
-        // await browser.close();
+        
+        await browser.close();
       } catch (error) {
         console.log(error);
         reject(error.message);

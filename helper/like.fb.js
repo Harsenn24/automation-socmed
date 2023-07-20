@@ -53,7 +53,7 @@ async function helper_like_fb(user_id, post_link, headless) {
 
         await screenshoot(page, user_id, "Like-FB");
 
-        // await browser.close();
+        await browser.close();
         resolve(final_result);
       } catch (error) {
         console.log(error.message);
