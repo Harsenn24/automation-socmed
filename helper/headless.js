@@ -19,6 +19,8 @@ async function headless_puppeteer(headless, puppeteerUrl) {
       headless: true,
     });
 
+    
+
     return browser;
   } else {
     const browser = await puppeteer.connect({

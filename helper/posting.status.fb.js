@@ -108,14 +108,22 @@ async function helper_posting_status_fb(
           if (image_video !== "") {
             await page.click('div[aria-label="Foto/video"]');
 
-            const input_file = await page.$('input[class="x1s85apg"]');
+            let selector_1 = 'input[class="x1s85apg"]';
+
+            let selector_2 =
+              'input[class="x1s85apg"][accept="image/*,image/heif,image/heic,video/*,video/mp4,video/x-m4v,video/x-matroska,.mkv"][type="file"]';
+
+            await page.waitForSelector(selector_2);
+
+            const input_file = await page.$(selector_2);
 
             const path_upload = path.join(
               __dirname,
               `../upload/${image_video}`
             );
 
-            input_file.uploadFile(path_upload);
+
+            await input_file.uploadFile(path_upload);
 
             console.log(`upload video / image done : ${user_id}`);
           }
@@ -155,19 +163,16 @@ async function helper_posting_status_fb(
 
             await update_user_account(user_id, null, true);
 
-            console.log(`success posting status account ${user_id}`)
+            console.log(`success posting status account ${user_id}`);
 
             resolve(`success posting status account ${user_id}`);
 
-            await browser.close();
+            // await browser.close();
           }, 5000);
         }, 5000);
       } catch (error) {
         await update_user_account(user_id, error.message, false);
-        await browser.close()
         reject(`error account ${user_id} : ${error}`);
-      } finally {
-        console.log("oke");
       }
     }, 8000);
   });

@@ -45,17 +45,16 @@ async function helper_like_fb(user_id, post_link, headless) {
 
           final_result = "Success like facebook";
         } else {
-          final_result = "You already like this facebook post";
+          final_result = "already like this facebook post";
         }
 
         console.log(`${user_id} ${final_result}`);
 
-        // await browser.close()
+        // await browser.close();
         resolve(final_result);
       } catch (error) {
         reject(`error account ${user_id} : ${error}`);
       }
-      await browser.close();
     }, 8000);
   });
 }

@@ -27,8 +27,6 @@ async function helper_report_comment_fb(
 
   await page.goto(post_link);
 
-  console.log(comment_link_input, "====> comment link input");
-
   let final_result = await new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
@@ -46,10 +44,14 @@ async function helper_report_comment_fb(
             node.getAttribute("href")
           );
 
+          console.log(hrefValue);
+
           if (hrefValue === comment_link_input) {
             console.log(true);
-
             let selector_three_spot = 'div[class="x1hy63sm xg01cxk xhva3ql"]';
+
+            // let selector_three_spot =
+            //   'div[aria-label="Sembunyikan atau laporkan ini"][aria-haspopup="menu"]';
 
             await page.waitForSelector(selector_three_spot);
 
@@ -95,18 +97,19 @@ async function helper_report_comment_fb(
                 break;
               }
             }
-          } 
+            let selector_send = 'div[aria-label="Kirim"]';
+
+            await page.waitForSelector(selector_send);
+
+            await page.click(selector_send);
+
+            console.log(user_id + " success report facebook comment");
+
+            resolve(
+              `success report command with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
+            );
+          }
         }
-
-        let selector_send = 'div[aria-label="Kirim"]';
-
-        await page.waitForSelector(selector_send);
-
-        await page.click(selector_send);
-
-        resolve(
-          `success report command with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
-        );
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
         reject(error);
