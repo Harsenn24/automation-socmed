@@ -109,7 +109,6 @@ async function helper_posting_status_fb(
           if (image_video !== "") {
             await page.click('div[aria-label="Foto/video"]');
 
-            let selector_1 = 'input[class="x1s85apg"]';
 
             let selector_2 =
               'input[class="x1s85apg"][accept="image/*,image/heif,image/heic,video/*,video/mp4,video/x-m4v,video/x-matroska,.mkv"][type="file"]';
