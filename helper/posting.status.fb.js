@@ -1,6 +1,7 @@
 const update_user_account = require("../controller/update.user");
 const { headless_axios, headless_puppeteer } = require("./headless");
 const path = require("path");
+const screenshoot = require("./screenshoot");
 
 async function helper_posting_status_fb(
   user_id,
@@ -91,8 +92,6 @@ async function helper_posting_status_fb(
               });
 
               await page.click(send_status_selector);
-
-              await screenshoot(page, user_id, "posting-status-FB");
             }, 5000);
           }
 
@@ -165,6 +164,8 @@ async function helper_posting_status_fb(
             await update_user_account(user_id, null, true);
 
             console.log(`success posting status account ${user_id}`);
+
+            await screenshoot(page, user_id, "posting-status-FB");
 
             resolve(`success posting status account ${user_id}`);
 

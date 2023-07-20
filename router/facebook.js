@@ -12,6 +12,7 @@ const report_comment_fb_multiple = require("../socmed/facebook/multiple.report.c
 const posting_status_fb = require("../socmed/facebook/posting.status");
 const posting_status_fb_multiple = require("../socmed/facebook/multiple.posting.status");
 const list_comment_fb = require("../controller/list.comment.fb");
+const fb_activity_feeling = require("../controller/fb_feeling_activity");
 const fb_router = express.Router();
 
 fb_router.get("/admin-socmed/facebook/like", like_fb);
@@ -48,5 +49,10 @@ fb_router.get(
 );
 
 fb_router.get("/admin-socmed/facebook/list-comment", list_comment_fb);
+
+fb_router.get(
+  "/admin-socmed/facebook/list-feeling-activity",
+  fb_activity_feeling
+);
 
 module.exports = fb_router;
