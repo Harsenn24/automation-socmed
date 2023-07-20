@@ -1,6 +1,6 @@
 const global_response = require("../../global_response");
-const helper_share_posting_fb = require("../../helper/share.posting.fb");
-const test_worker = require("../../helper/testworker.js.js");
+const helper_share_posting_fb = require("../../helper/facebook/share.posting.fb");
+const test_worker = require("../../helper/worker/worker.js");
 
 async function share_fb_multiple(req, res) {
   try {

@@ -1,7 +1,7 @@
-const update_user_account = require("../controller/update.user");
-const { headless_axios, headless_puppeteer } = require("./headless");
 const path = require("path");
-const screenshoot = require("./screenshoot");
+const update_user_account = require("../../controller/update.user");
+const screenshoot = require("../screenshoot");
+const { headless_axios, headless_puppeteer } = require("../headless");
 
 async function helper_posting_status_fb(
   user_id,

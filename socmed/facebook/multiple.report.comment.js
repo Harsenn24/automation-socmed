@@ -1,6 +1,6 @@
 const global_response = require("../../global_response");
 const helper_report_comment_fb = require("../../helper/report/report.comment.fb");
-const test_worker = require("../../helper/testworker.js.js");
+const test_worker = require("../../helper/worker/worker.js");
 
 async function report_comment_fb_multiple(req, res) {
   try {
