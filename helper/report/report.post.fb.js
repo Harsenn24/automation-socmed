@@ -1,5 +1,6 @@
 const update_user_account = require("../../controller/update.user");
 const { headless_axios, headless_puppeteer } = require("../headless");
+const screenshoot = require("../screenshoot");
 const sub_report = require("./sub.report");
 
 async function helper_report_post_fb(
@@ -86,13 +87,17 @@ async function helper_report_post_fb(
 
         await page.click(selector_send);
 
-        console.log(user_id + " success report facebook post");
+        setTimeout(async () => {
+          await screenshoot(page, user_id, "report-post-FB");
 
-        await update_user_account(user_id, null, true);
+          console.log(user_id + " success report facebook post");
 
-        resolve(
-          `success report post with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
-        );
+          await update_user_account(user_id, null, true);
+
+          resolve(
+            `success report post with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
+          );
+        }, 8000);
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
         await update_user_account(user_id, error.message, false);

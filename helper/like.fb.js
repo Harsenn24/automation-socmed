@@ -1,4 +1,5 @@
 const { headless_axios, headless_puppeteer } = require("./headless");
+const screenshoot = require("./screenshoot");
 
 async function helper_like_fb(user_id, post_link, headless) {
   const data = await headless_axios(headless, user_id);
@@ -50,9 +51,12 @@ async function helper_like_fb(user_id, post_link, headless) {
 
         console.log(`${user_id} ${final_result}`);
 
+        await screenshoot(page, user_id, "Like-FB");
+
         // await browser.close();
         resolve(final_result);
       } catch (error) {
+        console.log(error.message);
         reject(`error account ${user_id} : ${error}`);
       }
     }, 8000);
