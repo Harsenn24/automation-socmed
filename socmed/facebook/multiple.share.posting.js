@@ -1,8 +1,8 @@
 const global_response = require("../../global_response");
-const helper_report_comment_fb = require("../../helper/report/report.comment.fb");
+const helper_share_posting_fb = require("../../helper/share.posting.fb");
 const test_worker = require("../../helper/testworker.js.js");
 
-async function report_comment_fb_multiple(req, res) {
+async function share_fb_multiple(req, res) {
   try {
     const { post_link, user_data } = req.body;
 
@@ -19,8 +19,8 @@ async function report_comment_fb_multiple(req, res) {
     const final_result = await test_worker(
       user_data,
       post_link,
-      helper_report_comment_fb,
-      "report_comment",
+      helper_share_posting_fb,
+      "posting_facebook",
       headless
     );
 
@@ -30,4 +30,4 @@ async function report_comment_fb_multiple(req, res) {
   }
 }
 
-module.exports = report_comment_fb_multiple;
+module.exports = share_fb_multiple;
