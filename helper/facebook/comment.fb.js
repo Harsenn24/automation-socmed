@@ -1,7 +1,15 @@
+const update_user_activity = require("../../controller/activity");
 const { headless_axios, headless_puppeteer } = require("../headless");
 const screenshoot = require("../screenshoot");
 
-async function helper_comment_fb(user_id, post_link, user_comment, headless) {
+async function helper_comment_fb(
+  user_id,
+  post_link,
+  user_comment,
+  headless,
+  status_worker,
+  activity
+) {
   const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
@@ -10,6 +18,13 @@ async function helper_comment_fb(user_id, post_link, user_comment, headless) {
     };
   }
   const puppeteerUrl = data.data.ws.puppeteer;
+
+  if (!puppeteerUrl) {
+    throw {
+      message:
+        "puppeteer url is having problem, try again in minutes or restart adspower",
+    };
+  }
 
   const browser = await headless_puppeteer(headless, puppeteerUrl);
 
@@ -36,12 +51,20 @@ async function helper_comment_fb(user_id, post_link, user_comment, headless) {
 
         await screenshoot(page, user_id, "comment-FB");
 
+        if (!status_worker) {
+          await update_user_activity(user_id, activity, true, null);
+        }
+
         resolve("Facebook comment Success");
-        
-        await browser.close();
+
+        // await browser.close();
       } catch (error) {
-        console.log(error);
-        await browser.close()
+        if (!status_worker) {
+          await update_user_activity(user_id, activity, false, error.message);
+        }
+
+        // await browser.close();
+
         reject(error.message);
       }
     }, 5000);

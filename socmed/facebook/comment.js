@@ -19,7 +19,8 @@ async function comment_fb(req, res) {
       user_id,
       post_link,
       user_comment,
-      headless
+      headless,
+      false
     );
 
     res.status(200).json(global_response("SUCCESS", 200, final_result));

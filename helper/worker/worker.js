@@ -7,13 +7,14 @@ const {
   validationStatus,
   validationElse,
 } = require("./validation.worker");
+const { AdminActivity } = require("../../models/index");
 
 async function test_worker(
   users_queue,
   post_link,
   helper_fn,
-  action,
-  headless
+  headless,
+  activity
 ) {
   try {
     const result = {
@@ -24,16 +25,17 @@ async function test_worker(
     const processNextUser = async () => {
       if (users_queue.length > 0) {
         let by_user = users_queue.shift();
-        if (action === "comment") {
+        if (activity === "Comment Facebook") {
           await processComment(
             by_user,
             post_link,
             helper_fn,
             headless,
             result,
-            processNextUser
+            processNextUser,
+            activity
           );
-        } else if (action === "report_post" || action === "report_comment") {
+        } else if (activity === "report_post" || activity === "report_comment") {
           await validationReport(
             by_user,
             post_link,
@@ -43,7 +45,7 @@ async function test_worker(
             check_report_issue,
             processNextUser
           );
-        } else if (action === "posting_status") {
+        } else if (activity === "posting_status") {
           await validationStatus(
             by_user,
             check_feeling_activity_fb,
@@ -69,11 +71,20 @@ async function test_worker(
 
     await processNextUser();
 
+
+    console.log(result)
+
     if (result.failed.length > 0) {
-      for (const item of result.failed) {
-        const { user, message } = item;
-        await update_user_account(user, message, false);
-      }
+      // for (const item of result.failed) {
+      //   const { user, message } = item;
+      //   await update_user_account(user, message, false);
+      // }
+
+      await AdminActivity.bulkCreate(result.failed);
+    }
+
+    if (result.success.length > 0) {
+      await AdminActivity.bulkCreate(result.success);
     }
 
     return result;
