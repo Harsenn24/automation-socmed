@@ -1,4 +1,3 @@
-const update_user_account = require("../../controller/update.user");
 const { headless_axios, headless_puppeteer } = require("../../helper/headless");
 const screenshoot = require("../../helper/screenshoot");
 const sub_report = require("../../helper/report/sub.report");
@@ -82,12 +81,6 @@ async function helper_report_post_fb(
             break;
           }
         }
-
-        // let selector_send = 'div[aria-label="Kirim"]';
-
-        // await page.waitForSelector(selector_send);
-
-        // await page.click(selector_send);
 
         let selector_final =
           'span[class^="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]';
