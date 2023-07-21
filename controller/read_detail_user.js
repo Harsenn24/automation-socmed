@@ -2,7 +2,6 @@ const global_response = require("../global_response");
 const { User } = require("../models/index");
 const { Sequelize } = require('sequelize');
 
-
 async function read_detail_user(req, res) {
   try {
     const { id } = req.params;

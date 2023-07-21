@@ -6,8 +6,8 @@ const tiktok_router = require("./twitter");
 const router = express.Router();
 
 router.use(user_router);
-router.use(ig_router);
+// router.use(ig_router);
 router.use(fb_router);
-router.use(tiktok_router);
+// router.use(tiktok_router);
 
 module.exports = router;

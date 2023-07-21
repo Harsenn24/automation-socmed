@@ -1,7 +1,7 @@
 const global_response = require("../../global_response");
-const test_worker = require("../../helper/worker/worker.js");
 const { validate_body_follow } = require("../../helper/validation");
-const helper_follow_fb = require("../../helper/facebook/follow.fb");
+const test_worker = require("../../helper/worker/worker");
+const helper_follow_fb = require("../../services/facebook/follow.fb");
 
 async function follow_fb_multiple(req, res) {
   try {
@@ -15,17 +15,18 @@ async function follow_fb_multiple(req, res) {
 
     const { headless } = req.query;
 
-    const final_result = await test_worker(
+    res.status(200).json(global_response("SUCCESS", 200, "processing data"));
+
+    await test_worker(
       user_id,
       profile_link,
       helper_follow_fb,
-      "follow",
-      headless
+      headless,
+      "Follow Facebook",
     );
-
-    res.status(200).json(global_response("SUCCESS", 200, final_result));
   } catch (error) {
-    res.status(400).json(global_response("FAILED", 400, error.toString()));
+    console.log(error);
+    res.status(400).json(global_response("FAILED", 400, error.message));
   }
 }
 
