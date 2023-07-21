@@ -1,4 +1,3 @@
-const update_user_account = require("../../controller/update.user");
 const check_feeling_activity_fb = require("../facebook/check_feeling_activity_fb");
 const check_report_issue = require("../check_report_issue");
 const {
@@ -36,7 +35,7 @@ async function test_worker(
             activity
           );
         } else if (
-          activity === "report_post" ||
+          activity === "Report Facebook Post" ||
           activity === "report_comment"
         ) {
           await validationReport(
@@ -46,7 +45,8 @@ async function test_worker(
             headless,
             result,
             check_report_issue,
-            processNextUser
+            processNextUser,
+            activity
           );
         } else if (activity === "posting_status") {
           await validationStatus(

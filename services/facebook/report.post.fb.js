@@ -1,7 +1,7 @@
 const update_user_account = require("../../controller/update.user");
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
-const sub_report = require("./sub.report");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
+const sub_report = require("../../helper/report/sub.report");
 
 async function helper_report_post_fb(
   user_id,
@@ -40,25 +40,27 @@ async function helper_report_post_fb(
 
         await page.click(selector_three_spot);
 
-        let selector_report =
-          'span[class^="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xk50ysn xzsf02u x1yc453h"]';
+        const selector_report =
+          'div[class="x1i10hfl xjbqb8w x6umtig x1b1mbwd xaqea5y xav7gou xe8uvvx x1hl2dhg xggy1nq x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x87ps6o x1lku1pv x1a2a7pz xjyslct x9f619 x1ypdohk x78zum5 x1q0g3np x2lah0s xnqzcj9 x1gh759c xdj266r xat24cr x1344otq x1de53dj x1n2onr6 x16tdsg8 x1ja2u2z x6s0dn4 x1y1aw1k xwib8y2"]';
 
         await page.waitForSelector(selector_report);
 
-        const options = await page.$$(selector_report);
+        const commentElements = await page.$$(selector_report);
 
-        for (const option of options) {
-          const textContent = await option.evaluate((el) =>
-            el.textContent.trim()
+        for (const commentElement of commentElements) {
+          const text_content = await page.evaluate(
+            (element) => element.querySelector("span").textContent.trim(),
+            commentElement
           );
-          if (textContent === "Laporkan foto") {
-            await option.click();
+
+          if (text_content === "Laporkan foto") {
+            await commentElement.click();
             break;
           }
         }
 
         let selector_report_options =
-          'span[class^="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x676frb x1lkfr7t x1lbecb7 xk50ysn xzsf02u x1yc453h"]';
+          'span[class="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x676frb x1lkfr7t x1lbecb7 xk50ysn xzsf02u x1yc453h"]';
 
         await page.waitForSelector(selector_report_options);
 
@@ -81,18 +83,40 @@ async function helper_report_post_fb(
           }
         }
 
-        let selector_send = 'div[aria-label="Kirim"]';
+        // let selector_send = 'div[aria-label="Kirim"]';
 
-        await page.waitForSelector(selector_send);
+        // await page.waitForSelector(selector_send);
 
-        await page.click(selector_send);
+        // await page.click(selector_send);
+
+        let selector_final =
+          'span[class^="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]';
+
+        await page.waitForSelector(selector_final);
+
+        const option_final = await page.$$(selector_final);
+
+        for (const option of option_final) {
+          const textContent = await option.evaluate((el) =>
+            el.textContent.trim()
+          );
+
+          if (textContent === "Kirim") {
+            await option.click();
+            console.log("success report this post");
+            break;
+          }
+
+          if (textContent === "Selesai") {
+            console.log("You have been report with this issue");
+            break;
+          }
+        }
 
         setTimeout(async () => {
           await screenshoot(page, user_id, "report-post-FB");
 
           console.log(user_id + " success report facebook post");
-
-          await update_user_account(user_id, null, true);
 
           resolve(
             `success report post with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
@@ -101,9 +125,9 @@ async function helper_report_post_fb(
           await browser.close();
         }, 8000);
       } catch (error) {
+        await browser.close();
         console.log(`account ${user_id} : ${error}}`);
-        await update_user_account(user_id, error.message, false);
-        reject(error);
+        reject(error.message);
       }
     }, 5000);
   });
