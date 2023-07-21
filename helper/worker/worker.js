@@ -36,7 +36,7 @@ async function test_worker(
           );
         } else if (
           activity === "Report Facebook Post" ||
-          activity === "report_comment"
+          activity === "Report Facebook Comment"
         ) {
           await validationReport(
             by_user,

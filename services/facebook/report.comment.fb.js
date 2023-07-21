@@ -1,5 +1,5 @@
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 const sub_report = require("./sub.report");
 
 async function helper_report_comment_fb(
@@ -113,11 +113,12 @@ async function helper_report_comment_fb(
             `success report command with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_1}`
           );
 
-          await browser.close();
+          // await browser.close();
         }, 8000);
       } catch (error) {
+        // await browser.close()
         console.log(`account ${user_id} : ${error}}`);
-        reject(error);
+        reject(error.message);
       }
     }, 5000);
   });

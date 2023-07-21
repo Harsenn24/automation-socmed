@@ -1,7 +1,6 @@
 const express = require("express");
 const report_post_fb_multiple = require("../controller/facebook/report.post.js");
-const report_comment_fb = require("../socmed/facebook/report.comment");
-const report_comment_fb_multiple = require("../socmed/facebook/multiple.report.comment");
+const report_comment_fb_multiple = require("../controller/facebook/report.comment.js");
 const posting_status_fb = require("../socmed/facebook/posting.status");
 const posting_status_fb_multiple = require("../socmed/facebook/multiple.posting.status");
 const list_comment_fb = require("../controller/list.comment.fb");
@@ -26,7 +25,6 @@ fb_router.get(
   report_post_fb_multiple
 );
 
-fb_router.get("/admin-socmed/facebook/report-comment", report_comment_fb);
 
 fb_router.get(
   "/admin-socmed/facebook/report-comment-multiple",

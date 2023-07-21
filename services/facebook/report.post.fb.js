@@ -1,6 +1,6 @@
 const { headless_axios, headless_puppeteer } = require("../../helper/headless");
 const screenshoot = require("../../helper/screenshoot");
-const sub_report = require("../../helper/report/sub.report");
+const sub_report = require("./sub.report");
 
 async function helper_report_post_fb(
   user_id,

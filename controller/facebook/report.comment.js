@@ -1,5 +1,5 @@
 const global_response = require("../../global_response");
-const helper_report_comment_fb = require("../../helper/report/report.comment.fb");
+const helper_report_comment_fb = require("../../services/facebook/report.comment.fb");
 const test_worker = require("../../helper/worker/worker.js");
 
 async function report_comment_fb_multiple(req, res) {
@@ -16,17 +16,18 @@ async function report_comment_fb_multiple(req, res) {
 
     const { headless } = req.query;
 
-    const final_result = await test_worker(
+    res.status(200).json(global_response("Success", 200, "processing data"));
+
+    await test_worker(
       user_data,
       post_link,
       helper_report_comment_fb,
-      "report_comment",
-      headless
+      headless,
+      "Report Facebook Comment"
     );
-
-    res.status(200).json(global_response("Success", 200, final_result));
   } catch (error) {
-    res.status(400).json(global_response("FAILED", 400, error.message));
+    console.log(error);
+    res.status(400).json(global_response("Failed", 400, error.message));
   }
 }
 
