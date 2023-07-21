@@ -1,8 +1,4 @@
 const express = require("express");
-const like_fb = require("../socmed/facebook/like");
-const comment_fb = require("../socmed/facebook/comment");
-const like_fb_multiple = require("../socmed/facebook/multiple.like");
-const multiple_comment_fb = require("../socmed/facebook/multiple.comment");
 const follow_fb = require("../socmed/facebook/follow");
 const follow_fb_multiple = require("../socmed/facebook/multiple.follow");
 const report_post_fb = require("../socmed/facebook/report.post");
@@ -16,13 +12,12 @@ const fb_activity_feeling = require("../controller/fb_feeling_activity");
 const share_posting_fb = require("../socmed/facebook/share.posting");
 const share_fb_multiple = require("../socmed/facebook/multiple.share.posting");
 const report_user_fb = require("../socmed/facebook/report.user");
+const multiple_comment_fb = require("../controller/facebook/comment");
+const like_fb_multiple = require("../controller/facebook/like");
 const fb_router = express.Router();
 
-fb_router.get("/admin-socmed/facebook/like", like_fb);
 
 fb_router.get("/admin-socmed/facebook/like-multiple", like_fb_multiple);
-
-fb_router.get("/admin-socmed/facebook/comment", comment_fb);
 
 fb_router.get("/admin-socmed/facebook/comment-multiple", multiple_comment_fb);
 

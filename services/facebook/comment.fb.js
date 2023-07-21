@@ -1,14 +1,12 @@
 const update_user_activity = require("../../controller/activity");
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_comment_fb(
   user_id,
   post_link,
   user_comment,
   headless,
-  status_worker,
-  activity
 ) {
   const data = await headless_axios(headless, user_id);
 
@@ -51,19 +49,11 @@ async function helper_comment_fb(
 
         await screenshoot(page, user_id, "comment-FB");
 
-        if (!status_worker) {
-          await update_user_activity(user_id, activity, true, null);
-        }
-
         resolve("Facebook comment Success");
 
-        // await browser.close();
+        await browser.close();
       } catch (error) {
-        if (!status_worker) {
-          await update_user_activity(user_id, activity, false, error.message);
-        }
-
-        // await browser.close();
+        await browser.close();
 
         reject(error.message);
       }

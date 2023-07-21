@@ -1,5 +1,5 @@
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_like_fb(user_id, post_link, headless) {
   const data = await headless_axios(headless, user_id);

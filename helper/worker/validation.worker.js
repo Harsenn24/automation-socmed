@@ -12,7 +12,7 @@ async function processComment(
   try {
     const user_comment = by_user.comment;
 
-    await helper_fn(user_id, post_link, user_comment, headless, true);
+    await helper_fn(user_id, post_link, user_comment, headless);
 
     const result_success = {
       user_id,
@@ -137,14 +137,26 @@ async function validationElse(
   helper_fn,
   headless,
   result,
-  processNextUser
+  processNextUser,
+  activity,
+  post_link
 ) {
   try {
-    const result_like = await helper_fn(by_user, post_link, headless);
-    const result_success = { user: by_user, message: result_like };
+    await helper_fn(by_user, post_link, headless);
+    const result_success = {
+      user_id: by_user,
+      activity,
+      status: true,
+      error_message: null,
+    };
     result.success.push(result_success);
   } catch (error) {
-    const result_failed = { user: by_user, message: error.message };
+    const result_failed = {
+      user_id: by_user,
+      activity,
+      status: false,
+      error_message: error.message,
+    };
     result.failed.push(result_failed);
     await processNextUser();
     return error;

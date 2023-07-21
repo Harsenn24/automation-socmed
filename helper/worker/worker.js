@@ -35,7 +35,10 @@ async function test_worker(
             processNextUser,
             activity
           );
-        } else if (activity === "report_post" || activity === "report_comment") {
+        } else if (
+          activity === "report_post" ||
+          activity === "report_comment"
+        ) {
           await validationReport(
             by_user,
             post_link,
@@ -60,7 +63,9 @@ async function test_worker(
             helper_fn,
             headless,
             result,
-            processNextUser
+            processNextUser,
+            activity,
+            post_link
           );
         }
         await processNextUser();
@@ -71,15 +76,9 @@ async function test_worker(
 
     await processNextUser();
 
-
-    console.log(result)
+    console.log(result);
 
     if (result.failed.length > 0) {
-      // for (const item of result.failed) {
-      //   const { user, message } = item;
-      //   await update_user_account(user, message, false);
-      // }
-
       await AdminActivity.bulkCreate(result.failed);
     }
 
