@@ -26,7 +26,7 @@ async function processComment(
       user_id,
       activity,
       status: false,
-      error_message: error.message,
+      error_message: error,
     };
     result.failed.push(result_failed);
     await processNextUser();
@@ -59,6 +59,7 @@ async function validationReport(
       await helper_fn(user_id, post_link, headless, report_issue, sub_report);
     } else {
       const id_comment = by_user.id_comment;
+
       await helper_fn(
         user_id,
         post_link,
@@ -158,7 +159,7 @@ async function validationElse(
       user_id: by_user,
       activity,
       status: false,
-      error_message: error.message,
+      error_message: error,
     };
     result.failed.push(result_failed);
     await processNextUser();

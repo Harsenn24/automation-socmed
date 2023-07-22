@@ -25,7 +25,6 @@ fb_router.get(
   report_post_fb_multiple
 );
 
-
 fb_router.get(
   "/admin-socmed/facebook/report-comment-multiple",
   report_comment_fb_multiple
