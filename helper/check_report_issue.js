@@ -1,6 +1,11 @@
-async function check_report_issue(report_issue, sub_report) {
+async function check_report_issue(report_issue, sub_report, activity) {
   try {
-    let list_report = require("../data_adspower/report.json");
+    let list_report;
+    if (activity === "Report Facebook User") {
+      list_report = require("../data_adspower/report_user.json");
+    } else {
+      list_report = require("../data_adspower/report.json");
+    }
 
     const matchingIssue = list_report.find(
       (issue) => issue.report_issue === report_issue
@@ -16,9 +21,8 @@ async function check_report_issue(report_issue, sub_report) {
         throw { message: "sub report is incorrect" };
       }
     }
-
   } catch (error) {
-    console.log(error.message);
+    console.log(`error from check report issue : ${error}`);
     return error;
   }
 }

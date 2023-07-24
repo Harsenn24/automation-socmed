@@ -10,6 +10,8 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
     };
   }
 
+  console.log(data, "isi data");
+
   const puppeteerUrl = data.data.ws.puppeteer;
 
   const browser = await headless_puppeteer(headless, puppeteerUrl);
@@ -19,6 +21,8 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
   const page = pages[0];
 
   await page.goto(post_link);
+
+  console.log("sedang pergi ke link nya ....");
 
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
@@ -37,8 +41,12 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
             element.textContent.trim()
           );
 
+          console.log(textContent, "=====> isi dari text content");
+
           if (textContent === "Bagikan") {
             await option.click();
+
+            console.log("option clicked");
             break;
           }
         }
@@ -60,6 +68,9 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
 
             if (textContent === "Bagikan sekarang (Publik)") {
               await option.click();
+
+              console.log("share facebook posting success");
+
               break;
             }
           }
@@ -69,11 +80,11 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
           resolve("share facebook posting success");
         }, 5000);
       } catch (error) {
-        console.log(error);
-        
+        console.log(error.message);
+
         await browser.close();
 
-        reject(error);
+        reject(error.message);
       }
     }, 8000);
   });

@@ -45,19 +45,30 @@ async function validationReport(
   activity
 ) {
   let user_id = by_user.user_id;
+
   try {
     const report_issue = by_user.report_issue;
+
     const sub_report = by_user.subReport;
 
-    const check_input = await check_report_issue(report_issue, sub_report);
+    const check_input = await check_report_issue(
+      report_issue,
+      sub_report,
+      activity
+    );
 
     if (check_input) {
       throw { message: check_input.message };
     }
 
-    if (activity === "Report Facebook Post") {
+    if (
+      activity === "Report Facebook Post" ||
+      activity === "Report Facebook User"
+    ) {
+
       await helper_fn(user_id, post_link, headless, report_issue, sub_report);
     } else {
+
       const id_comment = by_user.id_comment;
 
       await helper_fn(
@@ -173,7 +184,7 @@ async function validationElse(
       user_id: by_user,
       activity,
       status: false,
-      error_message: error,
+      error_message: error.message,
     };
     result.failed.push(result_failed);
     await processNextUser();

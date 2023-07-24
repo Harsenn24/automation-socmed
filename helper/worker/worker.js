@@ -1,4 +1,4 @@
-const check_feeling_activity_fb = require("../facebook/check_feeling_activity_fb");
+const check_feeling_activity_fb = require("../check_feeling_activity_fb");
 const check_report_issue = require("../check_report_issue");
 const {
   processComment,
@@ -36,7 +36,8 @@ async function test_worker(
           );
         } else if (
           activity === "Report Facebook Post" ||
-          activity === "Report Facebook Comment"
+          activity === "Report Facebook Comment" ||
+          activity === "Report Facebook User"
         ) {
           await validationReport(
             by_user,
