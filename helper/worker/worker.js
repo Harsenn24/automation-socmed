@@ -48,14 +48,15 @@ async function test_worker(
             processNextUser,
             activity
           );
-        } else if (activity === "posting_status") {
+        } else if (activity === "Posting Status Facebook") {
           await validationStatus(
             by_user,
             check_feeling_activity_fb,
             helper_fn,
             headless,
             result,
-            processNextUser
+            processNextUser,
+            activity
           );
         } else {
           await validationElse(

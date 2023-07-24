@@ -1,7 +1,6 @@
 const path = require("path");
-const update_user_account = require("../../controller/update.user");
-const screenshoot = require("../screenshoot");
-const { headless_axios, headless_puppeteer } = require("../headless");
+const screenshoot = require("../../helper/screenshoot");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
 
 async function helper_posting_status_fb(
   user_id,
@@ -109,7 +108,6 @@ async function helper_posting_status_fb(
           if (image_video !== "") {
             await page.click('div[aria-label="Foto/video"]');
 
-
             let selector_2 =
               'input[class="x1s85apg"][accept="image/*,image/heif,image/heic,video/*,video/mp4,video/x-m4v,video/x-matroska,.mkv"][type="file"]';
 
@@ -119,7 +117,7 @@ async function helper_posting_status_fb(
 
             const path_upload = path.join(
               __dirname,
-              `../upload/${image_video}`
+              `../../upload/${image_video}`
             );
 
             await input_file.uploadFile(path_upload);
@@ -160,8 +158,6 @@ async function helper_posting_status_fb(
 
             await page.click(send_status_selector);
 
-            await update_user_account(user_id, null, true);
-
             console.log(`success posting status account ${user_id}`);
 
             await screenshoot(page, user_id, "posting-status-FB");
@@ -172,7 +168,10 @@ async function helper_posting_status_fb(
           }, 5000);
         }, 5000);
       } catch (error) {
-        await update_user_account(user_id, error.message, false);
+        await browser.close();
+
+        console.log(`error account ${user_id} : ${error}`);
+
         reject(`error account ${user_id} : ${error}`);
       }
     }, 8000);

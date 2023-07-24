@@ -96,7 +96,8 @@ async function validationStatus(
   helper_fn,
   headless,
   result,
-  processNextUser
+  processNextUser,
+  activity
 ) {
   let user_id = by_user.user_id;
   let user_message = by_user.status_message;
@@ -120,16 +121,29 @@ async function validationStatus(
   }
 
   try {
-    const result_success = await helper_fn(
+    await helper_fn(
       user_id,
       user_message,
       headless,
       image_video,
       feeling_activity
     );
+
+    const result_success = {
+      user_id,
+      activity,
+      status: true,
+      error_message: null,
+    };
+
     result.success.push(result_success);
   } catch (error) {
-    const result_failed = { user: user_id, message: error.message };
+    const result_failed = {
+      user_id,
+      activity,
+      status: false,
+      error_message: error.message,
+    };
     result.failed.push(result_failed);
     await processNextUser();
     return error;

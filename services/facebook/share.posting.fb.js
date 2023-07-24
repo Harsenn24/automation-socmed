@@ -1,6 +1,5 @@
-const update_user_account = require("../../controller/update.user");
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_share_posting_fb(user_id, post_link, headless) {
   const data = await headless_axios(headless, user_id);
@@ -67,15 +66,11 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
 
           await browser.close();
 
-          await update_user_account(user_id, null, true);
-
           resolve("share facebook posting success");
         }, 5000);
       } catch (error) {
         console.log(error);
-
-        await update_user_account(user_id, error.message, false);
-
+        
         await browser.close();
 
         reject(error);
