@@ -1,4 +1,3 @@
-const update_user_account = require("../../controller/update.user");
 const sub_report = require("./sub.report");
 const { headless_axios, headless_puppeteer } = require("../../helper/headless");
 const screenshoot = require("../../helper/screenshoot");
@@ -31,6 +30,7 @@ async function helper_report_user_fb(
   let final_result = await new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
+        console.log("masuk prosess . . . . .");
         await page.reload();
 
         let selector_option =
@@ -74,39 +74,30 @@ async function helper_report_user_fb(
 
           if (textContent === report_issue) {
             if (
-              report_issue !== "Berpura pura Menjadi Orang lain" ||
+              report_issue !== "Berpura-pura Menjadi Orang Lain" &&
               report_issue !== "Saya Ingin Membantu"
             ) {
               await option.click();
               break;
+            } else {
+              await option.click();
+
+              await sub_report(page, sub_report_data);
+
+              break;
             }
-            await option.click();
-
-            await sub_report(page, sub_report_data);
-
-            break;
           }
         }
 
-        let selector_finish =
-          'span[class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]';
-
-        await page.waitForSelector(selector_finish);
-
-        const option_finish_send = await page.$$(selector_finish);
+        const targetAriaLabels = ["Kirim", "Selesai"];
 
         setTimeout(async () => {
           await screenshoot(page, user_id, "report-user-FB");
 
-          for (const option of option_finish_send) {
-            const textContent = await option.evaluate((element) =>
-              element.textContent.trim()
-            );
-
-            if (textContent === "Selesai" || textContent === "Kirim") {
-              await option.click();
-
-              break;
+          for (const ariaLabel of targetAriaLabels) {
+            const elements = await page.$$(`[aria-label="${ariaLabel}"]`);
+            if (elements.length > 0) {
+              await elements[0].click();
             }
           }
 
@@ -116,11 +107,11 @@ async function helper_report_user_fb(
             `success report facebook user with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_data}`
           );
 
-          // await browser.close();
+          await browser.close();
         }, 8000);
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
-        // await browser.close();
+        await browser.close();
         reject(error);
       }
     }, 5000);
