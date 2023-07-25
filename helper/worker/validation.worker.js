@@ -26,7 +26,7 @@ async function processComment(
       user_id,
       activity,
       status: false,
-      error_message: error.message,
+      error_message: error,
     };
     result.failed.push(result_failed);
     await processNextUser();
@@ -41,32 +41,35 @@ async function validationReport(
   headless,
   result,
   check_report_issue,
-  processNextUser
+  processNextUser,
+  activity
 ) {
   let user_id = by_user.user_id;
+
   try {
     const report_issue = by_user.report_issue;
+
     const sub_report = by_user.subReport;
 
-    const check_input = await check_report_issue(report_issue, sub_report);
+    const check_input = await check_report_issue(
+      report_issue,
+      sub_report,
+      activity
+    );
 
     if (check_input) {
       throw { message: check_input.message };
     }
 
-    let process_report;
-
-    if (action === "report_post") {
-      process_report = await helper_fn(
-        user_id,
-        post_link,
-        headless,
-        report_issue,
-        sub_report
-      );
+    if (
+      activity === "Report Facebook Post" ||
+      activity === "Report Facebook User"
+    ) {
+      await helper_fn(user_id, post_link, headless, report_issue, sub_report);
     } else {
       const id_comment = by_user.id_comment;
-      process_report = await helper_fn(
+
+      await helper_fn(
         user_id,
         post_link,
         headless,
@@ -76,10 +79,20 @@ async function validationReport(
       );
     }
 
-    const result_success = { user: user_id, message: process_report };
+    const result_success = {
+      user_id,
+      activity,
+      status: true,
+      error_message: null,
+    };
     result.success.push(result_success);
   } catch (error) {
-    const result_failed = { user: user_id, message: error.message };
+    const result_failed = {
+      user_id,
+      activity,
+      status: false,
+      error_message: error.message,
+    };
     result.failed.push(result_failed);
     await processNextUser();
     return error;
@@ -92,40 +105,56 @@ async function validationStatus(
   helper_fn,
   headless,
   result,
-  processNextUser
+  processNextUser,
+  activity
 ) {
   let user_id = by_user.user_id;
   let user_message = by_user.status_message;
   let image_video = by_user.image_video;
   let feeling_activity = by_user.feeling_activity;
 
-  const check_feeling_activity = await check_feeling_activity_fb(
-    feeling_activity
-  );
+  if (!feeling_activity) {
+    feeling_activity = "";
+  }
 
-  if (check_feeling_activity) {
-    throw { message: check_feeling_activity.message };
+  if (feeling_activity) {
+    const check_feeling_activity = await check_feeling_activity_fb(
+      feeling_activity
+    );
+
+    if (check_feeling_activity) {
+      throw { message: check_feeling_activity.message };
+    }
   }
 
   if (!image_video) {
     image_video = "";
   }
 
-  if (!feeling_activity) {
-    feeling_activity = "";
-  }
-
   try {
-    const result_success = await helper_fn(
+    await helper_fn(
       user_id,
       user_message,
       headless,
       image_video,
       feeling_activity
     );
+
+    const result_success = {
+      user_id,
+      activity,
+      status: true,
+      error_message: null,
+    };
+
     result.success.push(result_success);
   } catch (error) {
-    const result_failed = { user: user_id, message: error.message };
+    const result_failed = {
+      user_id,
+      activity,
+      status: false,
+      error_message: error.message,
+    };
     result.failed.push(result_failed);
     await processNextUser();
     return error;

@@ -1,5 +1,4 @@
-const update_user_account = require("../../controller/update.user");
-const check_feeling_activity_fb = require("../facebook/check_feeling_activity_fb");
+const check_feeling_activity_fb = require("../check_feeling_activity_fb");
 const check_report_issue = require("../check_report_issue");
 const {
   processComment,
@@ -36,8 +35,9 @@ async function test_worker(
             activity
           );
         } else if (
-          activity === "report_post" ||
-          activity === "report_comment"
+          activity === "Report Facebook Post" ||
+          activity === "Report Facebook Comment" ||
+          activity === "Report Facebook User"
         ) {
           await validationReport(
             by_user,
@@ -46,16 +46,21 @@ async function test_worker(
             headless,
             result,
             check_report_issue,
-            processNextUser
+            processNextUser,
+            activity
           );
-        } else if (activity === "posting_status") {
+        } else if (
+          activity === "Posting Status Facebook" ||
+          activity === "Posting Status Twitter"
+        ) {
           await validationStatus(
             by_user,
             check_feeling_activity_fb,
             helper_fn,
             headless,
             result,
-            processNextUser
+            processNextUser,
+            activity
           );
         } else {
           await validationElse(

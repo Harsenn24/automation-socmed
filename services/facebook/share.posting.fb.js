@@ -1,6 +1,5 @@
-const update_user_account = require("../../controller/update.user");
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_share_posting_fb(user_id, post_link, headless) {
   const data = await headless_axios(headless, user_id);
@@ -11,6 +10,8 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
     };
   }
 
+  console.log(data, "isi data");
+
   const puppeteerUrl = data.data.ws.puppeteer;
 
   const browser = await headless_puppeteer(headless, puppeteerUrl);
@@ -20,6 +21,8 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
   const page = pages[0];
 
   await page.goto(post_link);
+
+  console.log("sedang pergi ke link nya ....");
 
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
@@ -38,8 +41,12 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
             element.textContent.trim()
           );
 
+          console.log(textContent, "=====> isi dari text content");
+
           if (textContent === "Bagikan") {
             await option.click();
+
+            console.log("option clicked");
             break;
           }
         }
@@ -61,24 +68,23 @@ async function helper_share_posting_fb(user_id, post_link, headless) {
 
             if (textContent === "Bagikan sekarang (Publik)") {
               await option.click();
+
+              console.log("share facebook posting success");
+
               break;
             }
           }
 
           await browser.close();
 
-          await update_user_account(user_id, null, true);
-
           resolve("share facebook posting success");
         }, 5000);
       } catch (error) {
-        console.log(error);
-
-        await update_user_account(user_id, error.message, false);
+        console.log(error.message);
 
         await browser.close();
 
-        reject(error);
+        reject(error.message);
       }
     }, 8000);
   });

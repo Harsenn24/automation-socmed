@@ -1,7 +1,6 @@
-const update_user_account = require("../../controller/update.user");
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
 const sub_report = require("./sub.report");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_report_user_fb(
   user_id,
@@ -31,6 +30,7 @@ async function helper_report_user_fb(
   let final_result = await new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
+        console.log("masuk prosess . . . . .");
         await page.reload();
 
         let selector_option =
@@ -74,45 +74,34 @@ async function helper_report_user_fb(
 
           if (textContent === report_issue) {
             if (
-              report_issue !== "Berpura pura Menjadi Orang lain" ||
+              report_issue !== "Berpura-pura Menjadi Orang Lain" &&
               report_issue !== "Saya Ingin Membantu"
             ) {
               await option.click();
               break;
-            }
-            await option.click();
-
-            await sub_report(page, sub_report_data);
-
-            break;
-          }
-        }
-
-        let selector_finish =
-          'span[class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]';
-
-        await page.waitForSelector(selector_finish);
-
-        const option_finish_send = await page.$$(selector_finish);
-
-        setTimeout(async () => {
-          await screenshoot(page, user_id, "report-user-FB");
-
-          for (const option of option_finish_send) {
-            const textContent = await option.evaluate((element) =>
-              element.textContent.trim()
-            );
-
-            if (textContent === "Selesai" || textContent === "Kirim") {
+            } else {
               await option.click();
+
+              await sub_report(page, sub_report_data);
 
               break;
             }
           }
+        }
+
+        const targetAriaLabels = ["Kirim", "Selesai"];
+
+        setTimeout(async () => {
+          await screenshoot(page, user_id, "report-user-FB");
+
+          for (const ariaLabel of targetAriaLabels) {
+            const elements = await page.$$(`[aria-label="${ariaLabel}"]`);
+            if (elements.length > 0) {
+              await elements[0].click();
+            }
+          }
 
           console.log(user_id + " success report facebook user");
-
-          await update_user_account(user_id, null, true);
 
           resolve(
             `success report facebook user with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_data}`
@@ -122,7 +111,7 @@ async function helper_report_user_fb(
         }, 8000);
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
-        await update_user_account(user_id, error.message, false);
+        await browser.close();
         reject(error);
       }
     }, 5000);
