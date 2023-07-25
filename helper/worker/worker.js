@@ -24,7 +24,10 @@ async function test_worker(
     const processNextUser = async () => {
       if (users_queue.length > 0) {
         let by_user = users_queue.shift();
-        if (activity === "Comment Facebook") {
+        if (
+          activity === "Comment Facebook" ||
+          activity === "Retweet Comment Twitter"
+        ) {
           await processComment(
             by_user,
             post_link,

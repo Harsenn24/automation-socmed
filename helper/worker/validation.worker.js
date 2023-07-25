@@ -26,7 +26,7 @@ async function processComment(
       user_id,
       activity,
       status: false,
-      error_message: error,
+      error_message: error.message,
     };
     result.failed.push(result_failed);
     await processNextUser();
