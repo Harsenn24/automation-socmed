@@ -95,7 +95,7 @@ async function helper_posting_status_fb(
           }
 
           const typing_selector =
-            'div[class="xzsf02u x1a2a7pz x1n2onr6 x14wi4xw x9f619 x1lliihq x5yr21d xh8yej3 notranslate"]';
+            'div[class="x1ed109x x1iyjqo2 x5yr21d x1n2onr6 xh8yej3"]';
 
           await page.waitForSelector(typing_selector, {
             visible: true,
