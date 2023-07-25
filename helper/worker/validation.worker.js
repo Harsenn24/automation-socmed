@@ -65,10 +65,8 @@ async function validationReport(
       activity === "Report Facebook Post" ||
       activity === "Report Facebook User"
     ) {
-
       await helper_fn(user_id, post_link, headless, report_issue, sub_report);
     } else {
-
       const id_comment = by_user.id_comment;
 
       await helper_fn(
@@ -115,20 +113,22 @@ async function validationStatus(
   let image_video = by_user.image_video;
   let feeling_activity = by_user.feeling_activity;
 
-  const check_feeling_activity = await check_feeling_activity_fb(
-    feeling_activity
-  );
+  if (!feeling_activity) {
+    feeling_activity = "";
+  }
 
-  if (check_feeling_activity) {
-    throw { message: check_feeling_activity.message };
+  if (feeling_activity) {
+    const check_feeling_activity = await check_feeling_activity_fb(
+      feeling_activity
+    );
+
+    if (check_feeling_activity) {
+      throw { message: check_feeling_activity.message };
+    }
   }
 
   if (!image_video) {
     image_video = "";
-  }
-
-  if (!feeling_activity) {
-    feeling_activity = "";
   }
 
   try {

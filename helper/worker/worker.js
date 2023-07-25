@@ -49,7 +49,10 @@ async function test_worker(
             processNextUser,
             activity
           );
-        } else if (activity === "Posting Status Facebook") {
+        } else if (
+          activity === "Posting Status Facebook" ||
+          activity === "Posting Status Twitter"
+        ) {
           await validationStatus(
             by_user,
             check_feeling_activity_fb,
