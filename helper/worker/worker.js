@@ -5,6 +5,7 @@ const {
   validationReport,
   validationStatus,
   validationElse,
+  validationReportTwitter,
 } = require("./validation.worker");
 const { AdminActivity } = require("../../models/index");
 
@@ -65,6 +66,16 @@ async function test_worker(
             processNextUser,
             activity
           );
+        } else if (activity === "Report Twitter User") {
+          await validationReportTwitter(
+            by_user,
+            post_link,
+            helper_fn,
+            headless,
+            result,
+            processNextUser,
+            activity
+          );
         } else {
           await validationElse(
             by_user,
@@ -76,6 +87,7 @@ async function test_worker(
             post_link
           );
         }
+
         await processNextUser();
       } else {
         console.log("All job are done");

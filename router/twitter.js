@@ -3,6 +3,7 @@ const follow_twitter = require("../controller/twitter/follow");
 const status_twitter = require("../controller/twitter/status");
 const retweet_comment_twitter = require("../controller/twitter/retweet.comment");
 const like_twitter = require("../controller/twitter/like");
+const report_user_twitter = require("../controller/twitter/report.user");
 const twitter_router = express.Router();
 
 twitter_router.get("/admin-socmed/twitter/follow", follow_twitter);
@@ -15,5 +16,7 @@ twitter_router.get(
 );
 
 twitter_router.get("/admin-socmed/twitter/like-tweet", like_twitter);
+
+twitter_router.get("/admin-socmed/twitter/report-user", report_user_twitter);
 
 module.exports = twitter_router;
