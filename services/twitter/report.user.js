@@ -2,8 +2,6 @@ const { headless_axios, headless_puppeteer } = require("../../helper/headless");
 const screenshoot = require("../../helper/screenshoot");
 
 async function service_report_user_twitter(user_id, account, headless, report) {
-  const { main_report, sub_1, sub_2 } = report;
-
   const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
@@ -129,7 +127,7 @@ async function service_report_user_twitter(user_id, account, headless, report) {
         await page.click('div[data-testid="ocfSettingsListSkipButton"]');
 
         const selector_report_list =
-          'label[class="css-1dbjc4n r-kemksi r-1kqtdi0 r-1q9bdsx r-d045u9 r-1loqt21 r-18u37iz r-16y2uox r-1wtj0ep"]';
+          'div[class="css-1dbjc4n r-1q9bdsx r-1udh08x r-tuq35u"]';
 
         await page.waitForSelector(selector_report_list);
 
@@ -144,7 +142,7 @@ async function service_report_user_twitter(user_id, account, headless, report) {
             element.textContent.trim()
           );
 
-          if (textContent === "Perilaku menghina") {
+          if (textContent === report) {
             await option.click();
           }
         }
