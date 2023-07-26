@@ -66,7 +66,10 @@ async function test_worker(
             processNextUser,
             activity
           );
-        } else if (activity === "Report Twitter User") {
+        } else if (
+          activity === "Report Twitter User" ||
+          activity === "Report Tweet User"
+        ) {
           await validationReportTwitter(
             by_user,
             post_link,
