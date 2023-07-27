@@ -48,7 +48,11 @@ async function list_comment_fb(req, res) {
               node.getAttribute("href")
             );
 
-            if (hrefValue.startsWith("https")) {
+            if (
+              hrefValue !== null &&
+              hrefValue !== "#" &&
+              hrefValue !== "/messages/t/"
+            ) {
               const comment_name = await element_names[
                 result_list_comment.length
               ].evaluate((el) => el.textContent.trim());
