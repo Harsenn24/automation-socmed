@@ -1,7 +1,7 @@
 const { headless_axios, headless_puppeteer } = require("../../helper/headless");
 const screenshoot = require("../../helper/screenshoot");
 
-async function service_report_user_twitter(user_id, account, headless, report) {
+async function service_report_tweet(user_id, tweet_link, headless, report) {
   const data = await headless_axios(headless, user_id);
 
   if (data.msg === "Failed to start browser") {
@@ -18,7 +18,7 @@ async function service_report_user_twitter(user_id, account, headless, report) {
 
   const page = pages[0];
 
-  await page.goto(`https://twitter.com/${account}`);
+  await page.goto(tweet_link);
 
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
@@ -26,7 +26,7 @@ async function service_report_user_twitter(user_id, account, headless, report) {
         await page.reload();
 
         const selector_option =
-          'div[aria-label="Lainnya"][data-testid="userActions"]';
+          'div[aria-label="Lainnya"][data-testid="caret"]';
 
         await page.waitForSelector(selector_option);
 
@@ -44,7 +44,7 @@ async function service_report_user_twitter(user_id, account, headless, report) {
             element.textContent.trim()
           );
 
-          if (textContent === `Laporkan @${account}`) {
+          if (textContent === `Laporkan Tweet`) {
             option.click();
 
             break;
@@ -71,7 +71,8 @@ async function service_report_user_twitter(user_id, account, headless, report) {
           );
 
           if (
-            textContent === "Semua orang di TwitterIni memengaruhi semua orang."
+            textContent ===
+            "Semua orang di TwitterTweet ini tidak menargetkan orang atau kelompok tertentu, tetapi ini berdampak terhadap semua orang di Twitter — seperti info yang menyesatkan atau konten sensitif."
           ) {
             await option.click();
           }
@@ -157,11 +158,11 @@ async function service_report_user_twitter(user_id, account, headless, report) {
         await page.click(selecor_send_report);
 
         setTimeout(async () => {
-          await screenshoot(page, user_id, "report-user-twitter");
+          await screenshoot(page, user_id, "report-tweet");
 
-          console.log(`${user_id} : report twitter user successfully`);
+          console.log(`${user_id} : report tweet successfully`);
 
-          resolve(`${user_id} : report twitter user successfully`);
+          resolve(`${user_id} : report tweet successfully`);
 
           await browser.close();
         }, 5000);
@@ -176,4 +177,4 @@ async function service_report_user_twitter(user_id, account, headless, report) {
   });
 }
 
-module.exports = service_report_user_twitter;
+module.exports = service_report_tweet;
