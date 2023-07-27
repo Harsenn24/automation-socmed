@@ -1,5 +1,6 @@
 const { headless_axios, headless_puppeteer } = require("../../helper/headless");
 const screenshoot = require("../../helper/screenshoot");
+const path = require("path");
 
 async function service_status_twitter(
   user_id,
@@ -42,17 +43,37 @@ async function service_status_twitter(
 
         await page.type(selector_status_column, user_tweet);
 
-        await page.keyboard.down("Control");
+        if (image_video !== "") {
+          let selector_upload =
+            'input[class="r-8akbif r-orgf3d r-1udh08x r-u8s1d r-xjis5s r-1wyyakw"][accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime"][type="file"]';
 
-        await page.keyboard.press("Enter");
+          await page.waitForSelector(selector_upload);
 
-        await screenshoot(page, user_id, "posting-status-twitter");
+          const input_file = await page.$(selector_upload);
 
-        console.log(`${user_id} : tweet successfully posted`);
+          const path_upload = path.join(
+            __dirname,
+            `../../upload/${image_video}`
+          );
 
-        resolve(`${user_id} : tweet successfully posted`);
+          await input_file.uploadFile(path_upload);
 
-        await browser.close();
+          console.log(`upload video / image done : ${user_id}`);
+        }
+
+        setTimeout(async () => {
+          await page.keyboard.down("Control");
+
+          await page.keyboard.press("Enter");
+
+          await screenshoot(page, user_id, "posting-status-twitter");
+
+          console.log(`${user_id} : tweet successfully posted`);
+
+          resolve(`${user_id} : tweet successfully posted`);
+
+          await browser.close();
+        }, 5000);
       } catch (error) {
         await browser.close();
 
