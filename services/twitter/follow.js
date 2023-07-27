@@ -1,5 +1,5 @@
-const update_user_account = require("../controller/update.user");
-const { headless_axios, headless_puppeteer } = require("./headless");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_follow_twitter(user_id, profile_link, headless) {
   const data = await headless_axios(headless, user_id);
@@ -18,17 +18,16 @@ async function helper_follow_twitter(user_id, profile_link, headless) {
 
   const page = pages[0];
 
-  await page.goto(profile_link);
+  await page.goto(`https://twitter.com/${profile_link}`);
 
-  let final_result = await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
         await page.reload();
 
-        const followSelector = 'div[data-testid="1400353926474395648-follow"]';
+        const followSelector = `div[aria-label="Ikuti @${profile_link}"]`;
 
-        const unfollowSelector =
-          'div[data-testid="1400353926474395648-unfollow"]';
+        const unfollowSelector = `div[aria-label="Mengikuti @${profile_link}"]`;
 
         await Promise.race([
           page.waitForSelector(followSelector, { timeout: 5000 }),
@@ -46,19 +45,22 @@ async function helper_follow_twitter(user_id, profile_link, headless) {
           result_follow = "You already follow this instagram account";
         }
 
-        console.log("Success follow!")
+        await screenshoot(page, user_id, "Follow-Twitter");
 
-        await update_user_account(user_id, null, true)
+        console.log(result_follow);
 
         resolve(result_follow);
+
+        await browser.close();
       } catch (error) {
+        await browser.close();
+
         console.log(`account ${user_id} : ${error}}`);
+
         reject(error);
-      } 
+      }
     }, 5000);
   });
-
-  return final_result;
 }
 
 module.exports = helper_follow_twitter;
