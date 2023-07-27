@@ -52,8 +52,6 @@ async function helper_report_comment_fb(
 
           let id_comment = href.split(/[?&]/)[1];
 
-          console.log(id_comment)
-
           if (id_comment === comment_link_input) {
             console.log("match comment link");
 

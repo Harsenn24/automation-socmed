@@ -53,12 +53,15 @@ async function list_comment_fb(req, res) {
               hrefValue !== "#" &&
               hrefValue !== "/messages/t/"
             ) {
+
+              let id_comment = hrefValue.split(/[?&]/)[1];
+
               const comment_name = await element_names[
                 result_list_comment.length
               ].evaluate((el) => el.textContent.trim());
 
               result_list_comment.push({
-                comment_link: hrefValue,
+                comment_link: id_comment,
                 comment_name: comment_name,
               });
             }
