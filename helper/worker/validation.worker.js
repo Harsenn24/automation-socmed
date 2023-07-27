@@ -1,3 +1,5 @@
+const check_report_twitter = require("../check_report_twitter");
+
 async function processComment(
   by_user,
   post_link,
@@ -192,9 +194,52 @@ async function validationElse(
   }
 }
 
+async function validationReportTwitter(
+  user_data,
+  account,
+  helper_fn,
+  headless,
+  result,
+  processNextUser,
+  activity
+) {
+  const user_id = user_data.user_id;
+
+  const report = user_data.report;
+
+  try {
+    const check_report = await check_report_twitter(report);
+
+    if (check_report) {
+      throw { message: check_report.message };
+    }
+
+    await helper_fn(user_id, account, headless, report);
+
+    const result_success = {
+      user_id: user_id,
+      activity,
+      status: true,
+      error_message: null,
+    };
+    result.success.push(result_success);
+  } catch (error) {
+    const result_failed = {
+      user_id: user_id,
+      activity,
+      status: false,
+      error_message: error.message,
+    };
+    result.failed.push(result_failed);
+    await processNextUser();
+    return error;
+  }
+}
+
 module.exports = {
   processComment,
   validationReport,
   validationStatus,
   validationElse,
+  validationReportTwitter,
 };
