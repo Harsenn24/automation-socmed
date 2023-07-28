@@ -25,8 +25,6 @@ async function helper_follow_ig(user_id, profile_link, headless) {
       try {
         await page.reload();
 
-        // const selector_follow = "._aacl._aaco._aacw._aad6._aade";
-
         const selector_follow = 'div[class="_aacl _aaco _aacw _aad6 _aade"]';
 
         await page.waitForSelector(selector_follow);
