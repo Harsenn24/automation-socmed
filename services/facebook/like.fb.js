@@ -56,6 +56,8 @@ async function helper_like_fb(user_id, post_link, headless) {
         await browser.close();
         resolve(final_result);
       } catch (error) {
+        await browser.close();
+
         console.log(error.message);
         reject(`error account ${user_id} : ${error}`);
       }
