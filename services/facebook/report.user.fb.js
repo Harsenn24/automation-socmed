@@ -92,14 +92,15 @@ async function helper_report_user_fb(
         const targetAriaLabels = ["Kirim", "Selesai"];
 
         setTimeout(async () => {
-          await screenshoot(page, user_id, "report-user-FB");
-
+          
           for (const ariaLabel of targetAriaLabels) {
             const elements = await page.$$(`[aria-label="${ariaLabel}"]`);
             if (elements.length > 0) {
               await elements[0].click();
             }
           }
+          
+          await screenshoot(page, user_id, "report-user-FB");
 
           console.log(user_id + " success report facebook user");
 
@@ -107,11 +108,11 @@ async function helper_report_user_fb(
             `success report facebook user with user ${user_id} with issue ${report_issue} and sub issue ${sub_report_data}`
           );
 
-          await browser.close();
+          // await browser.close();
         }, 8000);
       } catch (error) {
         console.log(`account ${user_id} : ${error}}`);
-        await browser.close();
+        // await browser.close();
         reject(error);
       }
     }, 5000);

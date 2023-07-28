@@ -83,7 +83,7 @@ async function helper_report_post_fb(
         }
 
         let selector_final =
-          'span[class^="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]';
+          'span[class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft"]';
 
         await page.waitForSelector(selector_final);
 
@@ -99,7 +99,6 @@ async function helper_report_post_fb(
             console.log("success report this post");
             break;
           }
-
           if (textContent === "Selesai") {
             console.log("You have been report with this issue");
             break;
