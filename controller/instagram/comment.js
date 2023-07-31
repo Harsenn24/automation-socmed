@@ -1,10 +1,9 @@
 const global_response = require("../../global_response");
-const helper_comment_ig = require("../../helper/instagram/comment.ig");
+const helper_comment_ig = require("../../services/instagram/comment.ig");
 const { validate_body_comment_multiple } = require("../../helper/validation");
 const test_worker = require("../../helper/worker/worker");
 
-
-async function comment_ig_multiple(req, res) {
+async function comment_instagram(req, res) {
   try {
     const check_validate = await validate_body_comment_multiple(req);
 
@@ -16,18 +15,23 @@ async function comment_ig_multiple(req, res) {
 
     const { headless } = req.query;
 
-    const final_result = await test_worker(
+    res
+      .status(200)
+      .json(
+        global_response("Success", 200, "processing data comment instagram")
+      );
+
+    await test_worker(
       user_data,
       post_link,
       helper_comment_ig,
-      "comment",
-      headless
+      headless,
+      "Comment Instagram"
     );
-
-    res.status(200).json(global_response("Success", 200, final_result));
   } catch (error) {
-    res.status(400).json(global_response("FAILED", 400, error.toString()));
+    console.log(error);
+    res.status(400).json(global_response("FAILED", 400, error.message));
   }
 }
 
-module.exports = comment_ig_multiple;
+module.exports = comment_instagram;
