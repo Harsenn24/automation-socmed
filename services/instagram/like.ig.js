@@ -1,4 +1,5 @@
-const { headless_axios, headless_puppeteer } = require("../headless");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_like_ig(user_id, post_link, headless) {
   const data = await headless_axios(headless, user_id);
@@ -19,7 +20,7 @@ async function helper_like_ig(user_id, post_link, headless) {
 
   await page.goto(`https://www.instagram.com/p/${post_link}`);
 
-  let final_result = await new Promise((resolve) => {
+  let final_result = await new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
         const titleValues = await page.$$eval("title", (elements) => {
@@ -29,6 +30,7 @@ async function helper_like_ig(user_id, post_link, headless) {
         const containsBatalSuka = titleValues.includes("Batal Suka");
 
         if (containsBatalSuka) {
+          console.log(`${user_id} : You already Liked this post`);
           resolve("You already like this instagram post");
         } else {
           await page.evaluate(() => {
@@ -37,13 +39,18 @@ async function helper_like_ig(user_id, post_link, headless) {
             );
             likeButton.parentElement.parentElement.parentElement.click();
           });
+          console.log(`${user_id} : "You like this post" `);
           resolve("You like this post");
         }
+
+        setTimeout(async () => {
+          await screenshoot(page, user_id, "Like-Instagram");
+          await browser.close();
+        }, 5000);
       } catch (error) {
+        await browser.close();
         console.log(`account ${user_id} : ${error}}`);
         reject(error);
-      } finally {
-        await browser.close();
       }
     }, 8000);
   });

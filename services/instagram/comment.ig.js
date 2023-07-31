@@ -1,5 +1,5 @@
-const { headless_axios, headless_puppeteer } = require("../headless");
-const screenshoot = require("../screenshoot");
+const { headless_axios, headless_puppeteer } = require("../../helper/headless");
+const screenshoot = require("../../helper/screenshoot");
 
 async function helper_comment_ig(user_id, post_link, user_comment, headless) {
   const data = await headless_axios(headless, user_id);
@@ -16,9 +16,10 @@ async function helper_comment_ig(user_id, post_link, user_comment, headless) {
   const pages = await browser.pages(0);
 
   const page = pages[0];
+  
+  await page.goto(`https://www.instagram.com/p/${post_link}`);
 
   return new Promise(async (resolve, reject) => {
-    await page.goto(`https://www.instagram.com/p/${post_link}`);
     setTimeout(async () => {
       try {
         await page.reload();
@@ -36,15 +37,17 @@ async function helper_comment_ig(user_id, post_link, user_comment, headless) {
         );
         await page.keyboard.press("Enter");
 
-        console.log("success comment instagram");
+        console.log(`${user_id} : success comment instagram`);
 
-        await screenshoot(page, user_id, "comment-ig");
+        setTimeout(async () => {
+          await screenshoot(page, user_id, "comment-instagram");
 
-        await browser.close();
+          await browser.close();
 
-        resolve("Instagram Comment Success");
+          resolve("Instagram Comment Success");
+        }, 5000);
       } catch (error) {
-        console.log(`account ${user_id} : ${error}}`);
+        console.log(`${user_id} : ${error}}`);
 
         await browser.close();
 

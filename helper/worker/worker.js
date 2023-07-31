@@ -27,7 +27,8 @@ async function test_worker(
         let by_user = users_queue.shift();
         if (
           activity === "Comment Facebook" ||
-          activity === "Retweet Comment Twitter"
+          activity === "Retweet Comment Twitter" ||
+          activity === "Comment Instagram"
         ) {
           await processComment(
             by_user,

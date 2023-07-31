@@ -1,9 +1,9 @@
 const global_response = require("../../global_response");
-const helper_like_ig = require("../../helper/instagram/like.ig");
+const helper_like_ig = require("../../services/instagram/like.ig");
 const { validate_body_like } = require("../../helper/validation");
 const test_worker = require("../../helper/worker/worker");
 
-async function like_ig_multiple(req, res) {
+async function like_instagram(req, res) {
   try {
     const check_validate = await validate_body_like(req);
 
@@ -15,18 +15,20 @@ async function like_ig_multiple(req, res) {
 
     const { headless } = req.query;
 
-    const result = await test_worker(
+    res
+      .status(200)
+      .json(global_response("Success", 200, "processing data like intagram"));
+
+    await test_worker(
       user_id,
       post_link,
       helper_like_ig,
-      "like",
-      headless
+      headless,
+      "Like Instagram"
     );
-
-    res.status(200).json(global_response("Success", 200, result));
   } catch (error) {
     res.status(400).json(global_response("FAILED", 400, error.toString()));
   }
 }
 
-module.exports = like_ig_multiple;
+module.exports = like_instagram;
