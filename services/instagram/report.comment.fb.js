@@ -95,8 +95,20 @@ async function service_report_comment_ig(
             await sub_report_ig(page, report_issue, sub_report_1);
           }
         }
+
+        setTimeout(async () => {
+          await screenshoot(page, user_id, "Report-Comment-Instagram");
+
+          await page.waitForSelector('button[class="_acan _acap _acas _aj1-"]');
+
+          await page.click('button[class="_acan _acap _acas _aj1-"]');
+
+          console.log(`account ${user_id} : success report instagram comment`);
+
+          await browser.close();
+        }, 5000);
       } catch (error) {
-        // await browser.close();
+        await browser.close();
         console.log(`account ${user_id} : ${error}}`);
         reject(error.message);
       }
