@@ -4,7 +4,10 @@ async function check_report_issue(report_issue, sub_report, activity) {
 
     if (activity === "Report Facebook User") {
       list_report = require("../data_adspower/report_user.json");
-    } else if (activity === "Report Instagram Comment") {
+    } else if (
+      activity === "Report Instagram Comment" ||
+      activity === "Report Instagram User"
+    ) {
       list_report = require("../data_adspower/report.ig.json");
     } else {
       list_report = require("../data_adspower/report.json");

@@ -43,7 +43,8 @@ async function test_worker(
           activity === "Report Facebook Post" ||
           activity === "Report Facebook Comment" ||
           activity === "Report Facebook User" ||
-          activity === "Report Instagram Comment"
+          activity === "Report Instagram Comment" ||
+          activity === "Report Instagram User"
         ) {
           await validationReport(
             by_user,

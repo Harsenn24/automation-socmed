@@ -1,8 +1,8 @@
 const global_response = require("../../global_response");
 const test_worker = require("../../helper/worker/worker");
-const service_report_comment_ig = require("../../services/instagram/report.comment.fb");
+const service_report_user_ig = require("../../services/instagram/report.user");
 
-async function report_comment_instagram(req, res) {
+async function report_user_instagram(req, res) {
   try {
     const { post_link, user_data } = req.body;
 
@@ -19,19 +19,15 @@ async function report_comment_instagram(req, res) {
     res
       .status(200)
       .json(
-        global_response(
-          "Success",
-          200,
-          "processing data report comment instagram"
-        )
+        global_response("Success", 200, "processing data report user instagram")
       );
 
     await test_worker(
       user_data,
       post_link,
-      service_report_comment_ig,
+      service_report_user_ig,
       headless,
-      "Report Instagram Comment"
+      "Report Instagram User"
     );
   } catch (error) {
     console.log(error);
@@ -39,4 +35,4 @@ async function report_comment_instagram(req, res) {
   }
 }
 
-module.exports = report_comment_instagram;
+module.exports = report_user_instagram;
