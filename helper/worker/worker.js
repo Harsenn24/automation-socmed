@@ -59,7 +59,8 @@ async function test_worker(
           );
         } else if (
           activity === "Posting Status Facebook" ||
-          activity === "Posting Status Twitter"
+          activity === "Posting Status Twitter" ||
+          activity === "Posting Feed Instagram"
         ) {
           await validationStatus(
             by_user,
