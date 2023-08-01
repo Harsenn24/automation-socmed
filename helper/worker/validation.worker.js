@@ -69,7 +69,6 @@ async function validationReport(
     ) {
       await helper_fn(user_id, post_link, headless, report_issue, sub_report);
     } else {
-      console.log("masuk else ");
       const id_comment = by_user.id_comment;
 
       await helper_fn(

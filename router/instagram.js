@@ -4,6 +4,7 @@ const like_instagram = require("../controller/instagram/like");
 const comment_instagram = require("../controller/instagram/comment");
 const report_comment_instagram = require("../controller/instagram/report.comment");
 const report_user_instagram = require("../controller/instagram/report.user");
+const report_post_instagram = require("../controller/instagram/report.post");
 const ig_router = express.Router();
 
 ig_router.get("/admin-socmed/instagram/comment", comment_instagram);
@@ -18,5 +19,7 @@ ig_router.get(
 );
 
 ig_router.get("/admin-socmed/instagram/report-user", report_user_instagram);
+
+ig_router.get("/admin-socmed/instagram/report-post", report_post_instagram);
 
 module.exports = ig_router;

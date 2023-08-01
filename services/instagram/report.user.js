@@ -150,7 +150,7 @@ async function service_report_user_ig(
 
           await button_send.click();
 
-          console.log(`account ${user_id} : success report instagram comment`);
+          console.log(`account ${user_id} : success report instagram user`);
 
           await browser.close();
         }, 5000);

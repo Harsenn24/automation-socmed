@@ -1,13 +1,13 @@
 const global_response = require("../../global_response");
 const test_worker = require("../../helper/worker/worker");
-const service_report_user_ig = require("../../services/instagram/report.user");
+const service_report_post_ig = require("../../services/instagram/report.post");
 
-async function report_user_instagram(req, res) {
+async function report_post_instagram(req, res) {
   try {
-    const { profile_link, user_data } = req.body;
+    const { post_link, user_data } = req.body;
 
-    if (!profile_link) {
-      throw { message: "profile link is required" };
+    if (!post_link) {
+      throw { message: "post link is required" };
     }
 
     if (!user_data) {
@@ -19,15 +19,15 @@ async function report_user_instagram(req, res) {
     res
       .status(200)
       .json(
-        global_response("Success", 200, "processing data report user instagram")
+        global_response("Success", 200, "processing data report post instagram")
       );
 
     await test_worker(
       user_data,
       post_link,
-      service_report_user_ig,
+      service_report_post_ig,
       headless,
-      "Report Instagram User"
+      "Report Instagram Post"
     );
   } catch (error) {
     console.log(error);
@@ -35,4 +35,4 @@ async function report_user_instagram(req, res) {
   }
 }
 
-module.exports = report_user_instagram;
+module.exports = report_post_instagram;
